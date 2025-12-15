@@ -1,57 +1,106 @@
 * {
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 body.light {
-  background: #f4f4f4;
-  color: #000;
+  background: #f1f3f4;
+  color: #202124;
 }
 
 body.dark {
   background: #121212;
-  color: #fff;
+  color: #e8eaed;
 }
 
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 15px;
-  background: #1a1a1a;
+  padding: 12px 20px;
+  background: #1a73e8;
   color: white;
 }
 
-header button {
-  padding: 6px 10px;
+.title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.mode-btn {
+  background: white;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   padding: 10px;
-  background: #eaeaea;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 body.dark .toolbar {
-  background: #1e1e1e;
+  background: #1f1f1f;
 }
 
 .toolbar button,
 .toolbar input,
 .upload-btn {
-  padding: 6px 10px;
-  border: 1px solid #aaa;
-  border-radius: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #dadce0;
+  background: #fff;
   cursor: pointer;
 }
 
-.board-container {
-  width: 100%;
-  height: calc(100vh - 110px);
-  overflow: auto;
+body.dark .toolbar button,
+body.dark .upload-btn {
+  background: #2b2b2b;
+  color: #fff;
+  border-color: #444;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropbtn {
+  background: #1a73e8;
+  color: white;
+  border: none;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
   background: white;
+  min-width: 140px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+.dropdown-content button {
+  width: 100%;
+  border: none;
+  background: white;
+  padding: 8px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.board-container {
+  position: relative;
+  height: calc(100vh - 120px);
+  overflow: auto;
+  background: #fff;
 }
 
 body.dark .board-container {
@@ -64,14 +113,9 @@ canvas {
 
 .text-box, .img-box {
   position: absolute;
-  min-width: 100px;
-  min-height: 30px;
+  padding: 6px;
   border: 1px dashed #888;
-  padding: 5px;
   cursor: move;
   background: transparent;
-}
-
-.text-box[contenteditable="true"] {
-  outline: none;
+  min-width: 100px;
 }
