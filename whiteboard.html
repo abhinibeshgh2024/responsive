@@ -1,27 +1,31 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Whiteboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="whiteboard.css">
+<meta charset="UTF-8">
+<title>Whiteboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="whiteboard.css">
 </head>
+
 <body class="light">
 
-<!-- LEFT SIDEBAR -->
+<header class="top-header">WHITEBOARD</header>
+
 <div class="sidebar">
 
-  <div class="tool-group">
-    <button class="tool main">✏</button>
-    <div class="sub-tools">
-      <button onclick="setTool('pen')">Pen</button>
-      <button onclick="setTool('marker')">Marker</button>
-      <button onclick="setTool('highlighter')">Highlighter</button>
+  <!-- PEN DROPDOWN -->
+  <div class="pen-wrapper">
+    <button class="tool pen-btn" onclick="togglePenMenu()">✏</button>
+    <div class="pen-menu" id="penMenu">
+      <button onclick="selectPen('pen')">Normal Pen</button>
+      <button onclick="selectPen('marker')">Marker</button>
+      <button onclick="selectPen('highlighter')">Highlighter</button>
     </div>
   </div>
 
-  <button class="tool" onclick="setTool('eraser')">🧽</button>
   <button class="tool" onclick="setTool('text')">🔤</button>
+  <button class="tool" onclick="setTool('eraser')">🧽</button>
 
   <label class="tool upload">
     🖼
@@ -31,12 +35,10 @@
   <input type="color" id="colorPicker" class="tool color">
   <input type="range" id="sizePicker" min="1" max="30" value="4" class="tool range">
 
-  <button class="tool" onclick="toggleMode()">🌙</button>
+  <button class="tool toggle" onclick="toggleMode()">🌙</button>
   <button class="tool" onclick="clearBoard()">🗑</button>
-
 </div>
 
-<!-- BOARD -->
 <div class="board-container" id="boardContainer">
   <canvas id="board"></canvas>
 </div>
