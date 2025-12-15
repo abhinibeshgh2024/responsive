@@ -1,108 +1,100 @@
-const canvas=document.getElementById("canvas");
+const canvas=document.getElementById("board");
 const ctx=canvas.getContext("2d");
-const board=document.getElementById("boardContainer");
-const header=document.getElementById("headerTitle");
+canvas.width=3000; canvas.height=2000;
 
-canvas.width=3600; canvas.height=2400;
+let tool="pen",drawing=false,color="#000",size=4;
+let undoStack=[],redoStack=[];
+let theme="light";
 
-let tool="pen", drawing=false, color="#000", size=4, dark=false;
-
-/* HEADER */
-function updateHeader(){
-  header.innerText="WHITEBOARD · "+tool.toUpperCase();
+function saveState(){
+  undoStack.push(canvas.toDataURL());
+  redoStack=[];
 }
 
-/* PEN MENU */
-function togglePenMenu(){
-  const m=document.getElementById("penMenu");
-  m.style.display=m.style.display==="block"?"none":"block";
+function undo(){
+  if(!undoStack.length)return;
+  redoStack.push(canvas.toDataURL());
+  let img=new Image();
+  img.src=undoStack.pop();
+  img.onload=()=>ctx.drawImage(img,0,0);
 }
-function selectPen(t){ tool=t; updateHeader(); document.getElementById("penMenu").style.display="none"; }
-function setTool(t){ tool=t; updateHeader(); }
 
-/* INPUTS */
-colorPicker.oninput=e=>color=e.target.value;
-sizePicker.oninput=e=>size=e.target.value;
+function redo(){
+  if(!redoStack.length)return;
+  undoStack.push(canvas.toDataURL());
+  let img=new Image();
+  img.src=redoStack.pop();
+  img.onload=()=>ctx.drawImage(img,0,0);
+}
 
-/* DRAWING */
 canvas.addEventListener("mousedown",e=>{
-  if(tool==="text") return createTextEditor(e);
-  drawing=true; ctx.beginPath();
-  const p=pos(e); ctx.moveTo(p.x,p.y);
+  if(tool==="text")return createText(e);
+  saveState();
+  drawing=true;
+  ctx.beginPath();
+  ctx.moveTo(e.offsetX,e.offsetY);
 });
 canvas.addEventListener("mousemove",e=>{
-  if(!drawing) return;
-  const p=pos(e);
-  if(tool==="marker"){ctx.globalAlpha=1;ctx.lineWidth=size*2}
-  else if(tool==="highlighter"){ctx.globalAlpha=.25;ctx.lineWidth=size*4}
-  else if(tool==="eraser"){ctx.strokeStyle=dark?"#000":"#fff";ctx.lineWidth=size*3}
-  else{ctx.globalAlpha=1;ctx.lineWidth=size;ctx.strokeStyle=color}
-  ctx.lineTo(p.x,p.y); ctx.stroke();
+  if(!drawing)return;
+  ctx.lineWidth=size;
+  ctx.strokeStyle=color;
+  ctx.lineTo(e.offsetX,e.offsetY);
+  ctx.stroke();
 });
 canvas.addEventListener("mouseup",()=>drawing=false);
 
-function pos(e){
-  const r=canvas.getBoundingClientRect();
-  return {x:e.clientX-r.left,y:e.clientY-r.top};
-}
+function setTool(t){tool=t}
+colorPicker.oninput=e=>color=e.target.value;
+sizePicker.oninput=e=>size=e.target.value;
 
-/* TEXT SYSTEM (MS PAINT STYLE) */
-function createTextEditor(e){
-  if(e.target!==canvas) return;
+/* TEXT SYSTEM */
+function createText(e){
   const box=document.createElement("div");
   box.className="text-editor";
   box.contentEditable=true;
-
-  const actions=document.createElement("div");
-  actions.className="text-actions";
-  const ok=document.createElement("span"); ok.innerHTML="✅";
-  const cancel=document.createElement("span"); cancel.innerHTML="❌";
-  actions.append(ok,cancel); box.appendChild(actions);
-
   box.style.left=e.offsetX+"px";
   box.style.top=e.offsetY+"px";
 
-  ok.onclick=()=>finalizeText(box);
-  cancel.onclick=()=>box.remove();
+  const act=document.createElement("div");
+  act.className="text-actions";
+  act.innerHTML="✅ ❌";
+  box.appendChild(act);
 
-  makeDraggable(box);
-  board.appendChild(box); box.focus();
+  act.children[0].onclick=()=>finalize(box);
+  act.children[1].onclick=()=>box.remove();
+
+  document.body.appendChild(box);
+  box.focus();
 }
 
-function finalizeText(box){
-  const txt=box.innerText.replace("✅","").replace("❌","").trim();
+function finalize(box){
+  const text=box.innerText.replace("✅","").replace("❌","").trim();
   const fixed=document.createElement("div");
   fixed.className="fixed-text";
-  fixed.innerText=txt;
+  fixed.innerText=text;
   fixed.style.left=box.style.left;
   fixed.style.top=box.style.top;
-  fixed.onclick=()=>{ box.innerText=txt; board.appendChild(box); fixed.remove(); box.focus(); };
-  board.appendChild(fixed); box.remove();
-}
 
-/* IMAGE */
-function addImage(e){
-  const img=document.createElement("img");
-  img.src=URL.createObjectURL(e.target.files[0]);
-  img.className="img-item"; img.style.width="260px";
-  img.style.left="120px"; img.style.top="120px";
-  makeDraggable(img); board.appendChild(img);
-}
-
-/* DRAG */
-function makeDraggable(el){
-  let ox,oy;
-  el.onmousedown=ev=>{
-    ox=ev.offsetX; oy=ev.offsetY;
-    document.onmousemove=mv=>{
-      el.style.left=mv.pageX-ox+"px";
-      el.style.top=mv.pageY-oy+"px";
-    };
-    document.onmouseup=()=>document.onmousemove=null;
+  fixed.onclick=()=>{
+    box.innerText=text;
+    document.body.appendChild(box);
+    fixed.remove();
   };
+
+  document.body.appendChild(fixed);
+  box.remove();
 }
 
-/* MISC */
-function toggleMode(){ dark=!dark; document.body.className=dark?"dark":"light"; }
-function clearBoard(){ ctx.clearRect(0,0,canvas.width,canvas.height); }
-updateHeader();
+/* THEME */
+function toggleTheme(){
+  theme=theme==="light"?"dark":"light";
+  document.body.className=theme;
+}
+
+/* EXPORT */
+function exportPNG(){
+  const link=document.createElement("a");
+  link.download="whiteboard.png";
+  link.href=canvas.toDataURL();
+  link.click();
+}
