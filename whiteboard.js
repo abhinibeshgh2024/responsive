@@ -23,7 +23,7 @@ function toggleMode() {
 document.getElementById("colorPicker").oninput = e => color = e.target.value;
 document.getElementById("sizePicker").oninput = e => size = e.target.value;
 
-// DRAWING
+// DRAW
 canvas.addEventListener("mousedown", startDraw);
 canvas.addEventListener("mousemove", draw);
 canvas.addEventListener("mouseup", () => drawing = false);
@@ -40,26 +40,21 @@ function draw(e) {
   if (!drawing) return;
   const p = getPos(e);
 
-  ctx.strokeStyle = color;
-
   if (tool === "marker") {
     ctx.globalAlpha = 1;
     ctx.lineWidth = size * 2;
-  } 
-  else if (tool === "highlighter") {
+  } else if (tool === "highlighter") {
     ctx.globalAlpha = 0.25;
     ctx.lineWidth = size * 4;
-  } 
-  else if (tool === "eraser") {
-    ctx.globalAlpha = 1;
+  } else if (tool === "eraser") {
     ctx.strokeStyle = dark ? "#000" : "#fff";
     ctx.lineWidth = size * 3;
-  } 
-  else {
+  } else {
     ctx.globalAlpha = 1;
     ctx.lineWidth = size;
   }
 
+  ctx.strokeStyle = color;
   ctx.lineTo(p.x, p.y);
   ctx.stroke();
 }
@@ -69,19 +64,30 @@ function getPos(e) {
   return { x: e.clientX - r.left, y: e.clientY - r.top };
 }
 
-// TEXT
+/* TEXT BOX ONLY INSIDE BOARD */
 function createTextBox(e) {
+  if (e.target !== canvas) return;
+
   const box = document.createElement("div");
   box.className = "text-box";
   box.contentEditable = true;
-  box.innerText = "Type here";
-  box.style.left = e.clientX + "px";
-  box.style.top = e.clientY + "px";
+
+  const close = document.createElement("span");
+  close.className = "close";
+  close.innerHTML = "❌";
+  close.onclick = () => box.remove();
+
+  box.appendChild(close);
+  box.appendChild(document.createTextNode("Type here"));
+
+  box.style.left = e.offsetX + "px";
+  box.style.top = e.offsetY + "px";
+
   makeDraggable(box);
   container.appendChild(box);
 }
 
-// IMAGE
+/* IMAGE */
 function addImage(e) {
   const img = document.createElement("img");
   img.src = URL.createObjectURL(e.target.files[0]);
@@ -93,7 +99,7 @@ function addImage(e) {
   container.appendChild(img);
 }
 
-// DRAG
+/* DRAG */
 function makeDraggable(el) {
   let ox, oy;
   el.onmousedown = ev => {
@@ -110,4 +116,3 @@ function makeDraggable(el) {
 function clearBoard() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
-
