@@ -8,40 +8,35 @@
 </head>
 <body class="light">
 
-<header>
-  <div class="title">Whiteboard</div>
+<!-- LEFT SIDEBAR -->
+<div class="sidebar">
 
-  <button class="mode-btn" onclick="toggleMode()">
-    🌙 / ☀
-  </button>
-</header>
-
-<div class="toolbar">
-
-  <div class="dropdown">
-    <button class="dropbtn">✏ Pen</button>
-    <div class="dropdown-content">
+  <div class="tool-group">
+    <button class="tool main">✏</button>
+    <div class="sub-tools">
       <button onclick="setTool('pen')">Pen</button>
       <button onclick="setTool('marker')">Marker</button>
       <button onclick="setTool('highlighter')">Highlighter</button>
     </div>
   </div>
 
-  <button onclick="setTool('eraser')">🧽 Eraser</button>
-  <button onclick="setTool('text')">🔤 Text</button>
+  <button class="tool" onclick="setTool('eraser')">🧽</button>
+  <button class="tool" onclick="setTool('text')">🔤</button>
 
-  <input type="color" id="colorPicker" value="#1a73e8">
-  <input type="range" id="sizePicker" min="1" max="30" value="4">
-
-  <label class="upload-btn">
-    🖼 Image
+  <label class="tool upload">
+    🖼
     <input type="file" hidden onchange="addImage(event)">
   </label>
 
-  <button onclick="clearBoard()">🗑 Clear</button>
+  <input type="color" id="colorPicker" class="tool color">
+  <input type="range" id="sizePicker" min="1" max="30" value="4" class="tool range">
+
+  <button class="tool" onclick="toggleMode()">🌙</button>
+  <button class="tool" onclick="clearBoard()">🗑</button>
 
 </div>
 
+<!-- BOARD -->
 <div class="board-container" id="boardContainer">
   <canvas id="board"></canvas>
 </div>
