@@ -2,79 +2,81 @@ const canvas = document.getElementById("board");
 const ctx = canvas.getContext("2d");
 const container = document.getElementById("boardContainer");
 
-canvas.width = 3000;
-canvas.height = 2000;
+canvas.width = 3500;
+canvas.height = 2200;
 
 let tool = "pen";
 let drawing = false;
-let color = "#000";
-let size = 3;
-let mode = "light";
+let color = "#1a73e8";
+let size = 4;
+let dark = false;
 
 function setTool(t) {
   tool = t;
 }
 
 function toggleMode() {
-  document.body.classList.toggle("dark");
-  document.body.classList.toggle("light");
+  dark = !dark;
+  document.body.className = dark ? "dark" : "light";
 }
 
 document.getElementById("colorPicker").oninput = e => color = e.target.value;
 document.getElementById("sizePicker").oninput = e => size = e.target.value;
 
 // DRAWING
-canvas.addEventListener("mousedown", start);
+canvas.addEventListener("mousedown", startDraw);
 canvas.addEventListener("mousemove", draw);
 canvas.addEventListener("mouseup", () => drawing = false);
 
-canvas.addEventListener("touchstart", start);
-canvas.addEventListener("touchmove", draw);
-canvas.addEventListener("touchend", () => drawing = false);
-
-function getPos(e) {
-  const rect = canvas.getBoundingClientRect();
-  const p = e.touches ? e.touches[0] : e;
-  return {
-    x: p.clientX - rect.left,
-    y: p.clientY - rect.top
-  };
-}
-
-function start(e) {
+function startDraw(e) {
   if (tool === "text") return createTextBox(e);
   drawing = true;
   ctx.beginPath();
-  const pos = getPos(e);
-  ctx.moveTo(pos.x, pos.y);
+  const p = getPos(e);
+  ctx.moveTo(p.x, p.y);
 }
 
 function draw(e) {
   if (!drawing) return;
-  const pos = getPos(e);
+  const p = getPos(e);
 
-  if (tool === "highlighter") {
-    ctx.globalAlpha = 0.3;
+  ctx.strokeStyle = color;
+
+  if (tool === "marker") {
+    ctx.globalAlpha = 1;
+    ctx.lineWidth = size * 2;
+  } 
+  else if (tool === "highlighter") {
+    ctx.globalAlpha = 0.25;
+    ctx.lineWidth = size * 4;
+  } 
+  else if (tool === "eraser") {
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = dark ? "#000" : "#fff";
     ctx.lineWidth = size * 3;
-  } else {
+  } 
+  else {
     ctx.globalAlpha = 1;
     ctx.lineWidth = size;
   }
 
-  ctx.strokeStyle = tool === "eraser" ? "#fff" : color;
-  ctx.lineTo(pos.x, pos.y);
+  ctx.lineTo(p.x, p.y);
   ctx.stroke();
 }
 
-// TEXT BOX
+function getPos(e) {
+  const r = canvas.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+// TEXT
 function createTextBox(e) {
-  const pos = getPos(e);
   const box = document.createElement("div");
   box.className = "text-box";
   box.contentEditable = true;
-  box.style.left = pos.x + "px";
-  box.style.top = pos.y + "px";
-  box.innerText = "Type here...";
+  box.innerText = "Type here";
+  box.style.left = e.clientX + "px";
+  box.style.top = e.clientY + "px";
   makeDraggable(box);
   container.appendChild(box);
 }
@@ -84,22 +86,22 @@ function addImage(e) {
   const img = document.createElement("img");
   img.src = URL.createObjectURL(e.target.files[0]);
   img.className = "img-box";
+  img.style.width = "250px";
   img.style.left = "100px";
   img.style.top = "100px";
-  img.style.width = "300px";
   makeDraggable(img);
   container.appendChild(img);
 }
 
-// DRAG LOGIC
+// DRAG
 function makeDraggable(el) {
-  let offsetX, offsetY;
-  el.onmousedown = e => {
-    offsetX = e.offsetX;
-    offsetY = e.offsetY;
-    document.onmousemove = ev => {
-      el.style.left = ev.pageX - offsetX + "px";
-      el.style.top = ev.pageY - offsetY + "px";
+  let ox, oy;
+  el.onmousedown = ev => {
+    ox = ev.offsetX;
+    oy = ev.offsetY;
+    document.onmousemove = mv => {
+      el.style.left = mv.pageX - ox + "px";
+      el.style.top = mv.pageY - oy + "px";
     };
     document.onmouseup = () => document.onmousemove = null;
   };
@@ -108,3 +110,4 @@ function makeDraggable(el) {
 function clearBoard() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
+
