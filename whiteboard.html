@@ -9,41 +9,42 @@
 
 <body class="light">
 
-<header class="header" id="headerTitle">
-  WHITEBOARD · PEN
+<!-- HEADER -->
+<header class="header">
+  <div class="title">WHITEBOARD PRO</div>
+  <button class="toggle" onclick="toggleTheme()">🌙</button>
 </header>
 
-<!-- LEFT TOOLBAR -->
-<div class="toolbar">
+<!-- HORIZONTAL MENU -->
+<nav class="menu-bar">
+  <button>File</button>
+  <button onclick="undo()">Undo</button>
+  <button onclick="redo()">Redo</button>
+  <button onclick="addPage()">New Page</button>
+  <button onclick="exportPNG()">Export PNG</button>
+</nav>
 
-  <!-- PEN DROPDOWN -->
+<!-- TOOLBAR -->
+<div class="toolbar">
   <div class="tool-group">
-    <button class="tool-btn" onclick="togglePenMenu()" title="Pen">✏️</button>
+    <button onclick="togglePenMenu()">✏</button>
     <div class="dropdown" id="penMenu">
-      <button onclick="selectPen('pen')">🖊 Normal Pen</button>
-      <button onclick="selectPen('marker')">🖍 Marker</button>
-      <button onclick="selectPen('highlighter')">🟨 Highlighter</button>
+      <button onclick="selectPen('pen')">Pen</button>
+      <button onclick="selectPen('marker')">Marker</button>
+      <button onclick="selectPen('highlighter')">Highlighter</button>
     </div>
   </div>
 
-  <button class="tool-btn" onclick="setTool('text')" title="Text">🔤</button>
-  <button class="tool-btn" onclick="setTool('eraser')" title="Eraser">🧽</button>
+  <button onclick="setTool('text')">🔤</button>
+  <button onclick="setTool('eraser')">🧽</button>
 
-  <label class="tool-btn upload" title="Image">
-    🖼
-    <input type="file" hidden onchange="addImage(event)">
-  </label>
-
-  <input type="color" id="colorPicker" class="tool-color" title="Color">
-  <input type="range" id="sizePicker" min="1" max="30" value="4" class="tool-range" title="Size">
-
-  <button class="tool-btn" onclick="toggleMode()" title="Dark/Light">🌗</button>
-  <button class="tool-btn" onclick="clearBoard()" title="Clear">🗑</button>
+  <input type="color" id="colorPicker">
+  <input type="range" id="sizePicker" min="1" max="30" value="4">
 </div>
 
 <!-- BOARD -->
-<div class="board" id="boardContainer">
-  <canvas id="canvas"></canvas>
+<div class="board-wrapper">
+  <canvas id="board"></canvas>
 </div>
 
 <script src="whiteboard.js"></script>
