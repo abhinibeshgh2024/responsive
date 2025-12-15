@@ -5,7 +5,7 @@
 
 body {
   margin: 0;
-  background: #0a0a0a;
+  background: #0b0b0b;
   color: #ffffff;
 }
 
@@ -24,8 +24,8 @@ header h1 {
 .container {
   display: flex;
   flex-wrap: wrap;
-  padding: 20px;
   gap: 20px;
+  padding: 20px;
 }
 
 .input-panel, .chart-panel {
@@ -42,29 +42,37 @@ header h1 {
 
 label {
   display: block;
-  margin-top: 12px;
-  font-size: 14px;
+  margin-top: 10px;
 }
 
-input, select {
+select, input {
   width: 100%;
   padding: 10px;
-  margin-top: 6px;
+  margin-top: 5px;
   background: #000;
   color: #fff;
   border: 1px solid #00bfff;
   border-radius: 6px;
 }
 
+.row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.row input {
+  flex: 1;
+}
+
 button {
   width: 100%;
-  margin-top: 20px;
   padding: 12px;
+  margin-top: 15px;
   background: #00bfff;
-  color: #000;
-  font-weight: bold;
   border: none;
   border-radius: 8px;
+  font-weight: bold;
   cursor: pointer;
 }
 
@@ -91,7 +99,7 @@ footer {
 }
 
 @media (max-width: 600px) {
-  header h1 {
-    font-size: 20px;
+  .row {
+    flex-direction: column;
   }
 }
