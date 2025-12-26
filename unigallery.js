@@ -23,14 +23,15 @@ function loadGallery(category) {
     const title = document.getElementById("sectionTitle");
 
     gallery.innerHTML = "";
-    title.innerText = category.charAt(0).toUpperCase() + category.slice(1);
+    title.innerText =
+        category.charAt(0).toUpperCase() + category.slice(1);
 
     imageData[category].forEach(src => {
         const card = document.createElement("div");
         card.className = "gallery-card";
 
         card.innerHTML = `
-            <img src="${src}" alt="image">
+            <img src="${src}" alt="gallery image">
             <div class="download-bar">
                 <a href="${src}" download>PNG</a>
                 <a href="${src}" download>JPG</a>
@@ -41,8 +42,8 @@ function loadGallery(category) {
         gallery.appendChild(card);
     });
 
-    window.scrollTo({ top: 120, behavior: "smooth" });
+    window.scrollTo({ top: 140, behavior: "smooth" });
 }
 
-// Default load
+/* Default Load */
 loadGallery("devotion");
