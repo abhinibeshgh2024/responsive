@@ -4,32 +4,35 @@
     <meta charset="UTF-8">
     <title>GoGenix Art Gallery</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="unigallery.css">
+
+    <!-- jsPDF for PDF download (works on mobile & PC) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
-<!-- ===== HEADER ===== -->
 <header class="main-header">
     <h1>GoGenix Art Gallery</h1>
 
     <nav class="navbar">
-        <span onclick="loadGallery('devotion')">Devotion</span>
-        <span onclick="loadGallery('nature')">Nature</span>
-        <span onclick="loadGallery('environment')">Environment</span>
-        <span onclick="loadGallery('monuments')">Monuments</span>
+        <button onclick="loadGallery('devotion')">Devotion</button>
+        <button onclick="loadGallery('nature')">Nature</button>
+        <button onclick="loadGallery('environment')">Environment</button>
+        <button onclick="loadGallery('monuments')">Monuments</button>
     </nav>
 </header>
 
-<!-- ===== GALLERY ===== -->
 <section class="section">
     <h2 id="sectionTitle">Devotion</h2>
     <div class="gallery" id="gallery"></div>
 </section>
 
-<!-- ===== VIEW MODAL ===== -->
+<!-- VIEW / DOWNLOAD MODAL -->
 <div class="modal" id="imageModal">
-    <span class="close" onclick="closeModal()">×</span>
+    <span class="close" onclick="closeModal()">✕</span>
     <img id="modalImg">
+
     <div class="modal-actions">
         <button onclick="downloadImage('png')">PNG</button>
         <button onclick="downloadImage('jpg')">JPG</button>
