@@ -1,5 +1,6 @@
 let currentImage = "";
 
+/* ===== DATA ===== */
 const imageData = {
     devotion: [
         "https://picsum.photos/id/1011/800/1200",
@@ -20,27 +21,29 @@ const imageData = {
     ]
 };
 
+/* ===== LOAD ===== */
 function loadGallery(category) {
     const gallery = document.getElementById("gallery");
-    const title = document.getElementById("sectionTitle");
+    document.getElementById("sectionTitle").innerText =
+        category.toUpperCase();
 
     gallery.innerHTML = "";
-    title.innerText = category.toUpperCase();
 
     imageData[category].forEach(src => {
         gallery.innerHTML += `
             <div class="gallery-card">
                 <img src="${src}">
                 <div class="card-actions">
-                    <button onclick="viewImage('${src}')">View</button>
-                    <button onclick="directDownload('${src}')">Download</button>
+                    <button onclick="openModal('${src}')">View</button>
+                    <button onclick="openModal('${src}')">Download</button>
                 </div>
             </div>
         `;
     });
 }
 
-function viewImage(src) {
+/* ===== MODAL ===== */
+function openModal(src) {
     currentImage = src;
     document.getElementById("modalImg").src = src;
     document.getElementById("imageModal").style.display = "flex";
@@ -50,22 +53,48 @@ function closeModal() {
     document.getElementById("imageModal").style.display = "none";
 }
 
-function directDownload(src) {
-    downloadFile(src, "jpg");
-}
-
+/* ===== DOWNLOAD LOGIC ===== */
 function downloadImage(type) {
-    downloadFile(currentImage, type);
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = currentImage;
+
+    img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        canvas.getContext("2d").drawImage(img, 0, 0);
+
+        if (type === "png") {
+            canvas.toBlob(b => saveFile(b, "GoGenix.png"), "image/png");
+        }
+
+        if (type === "jpg") {
+            canvas.toBlob(b => saveFile(b, "GoGenix.jpg"), "image/jpeg", 0.95);
+        }
+
+        if (type === "pdf") {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: img.width > img.height ? "l" : "p",
+                unit: "px",
+                format: [img.width, img.height]
+            });
+            pdf.addImage(canvas.toDataURL("image/jpeg"), "JPEG", 0, 0);
+            pdf.save("GoGenix.pdf");
+        }
+    };
 }
 
-function downloadFile(src, type) {
+/* ===== SAVE (PC + ANDROID) ===== */
+function saveFile(blob, filename) {
     const link = document.createElement("a");
-    link.href = src;
-    link.download = `GoGenix_Image.${type}`;
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 }
 
-/* Default */
+/* DEFAULT */
 loadGallery("devotion");
