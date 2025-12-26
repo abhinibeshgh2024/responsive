@@ -2,79 +2,77 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-/* ===== BODY ===== */
 body {
     background: #0b1320;
-    color: #fff;
+    color: #ffffff;
 }
 
-/* ===== HEADER (GOOGLE STYLE) ===== */
+/* ===== HEADER ===== */
 .main-header {
     position: sticky;
     top: 0;
-    z-index: 200;
-    background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(14px);
-    padding: 18px;
+    z-index: 100;
     text-align: center;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 16px;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
 }
 
 .main-header h1 {
     font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 /* ===== NAVBAR ===== */
 .navbar {
     display: flex;
     justify-content: center;
-    gap: 18px;
-    overflow-x: auto;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-.navbar span {
+.navbar button {
     padding: 6px 14px;
     font-size: 13px;
     border-radius: 16px;
+    border: none;
     cursor: pointer;
-    background: rgba(255,255,255,0.08);
-    transition: 0.3s;
+    background: rgba(255,255,255,0.12);
+    color: white;
 }
 
-.navbar span:hover {
+.navbar button:hover {
     background: #4da3ff;
-    color: #000;
+    color: black;
 }
 
 /* ===== SECTION ===== */
 .section {
-    padding: 40px 24px;
+    padding: 30px 18px;
 }
 
 .section h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 18px;
+    font-size: 22px;
 }
 
-/* ===== GALLERY GRID ===== */
+/* ===== GALLERY ===== */
 .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
 }
 
 /* ===== CARD ===== */
 .gallery-card {
-    height: 230px;
-    border-radius: 16px;
+    height: 200px;
+    border-radius: 14px;
     overflow: hidden;
     position: relative;
-    background: #000;
+    background: black;
 }
 
 .gallery-card img {
@@ -83,12 +81,12 @@ body {
     object-fit: cover;
 }
 
-/* ===== CARD ACTIONS ===== */
+/* ===== ACTIONS ===== */
 .card-actions {
     position: absolute;
     bottom: 0;
     width: 100%;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.65);
     display: flex;
     justify-content: space-around;
     padding: 6px;
@@ -96,10 +94,10 @@ body {
 
 .card-actions button {
     font-size: 12px;
+    padding: 4px 8px;
     border: none;
-    background: #4da3ff;
-    padding: 4px 10px;
     border-radius: 6px;
+    background: #4da3ff;
     cursor: pointer;
 }
 
@@ -108,7 +106,7 @@ body {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.92);
+    background: rgba(0,0,0,0.95);
     z-index: 500;
     justify-content: center;
     align-items: center;
@@ -117,23 +115,33 @@ body {
 
 .modal img {
     max-width: 90%;
-    max-height: 70%;
-    margin-bottom: 20px;
+    max-height: 65%;
+}
+
+.modal-actions {
+    margin-top: 16px;
 }
 
 .modal-actions button {
     margin: 6px;
     padding: 8px 14px;
     border: none;
-    background: #4da3ff;
     border-radius: 8px;
+    background: #4da3ff;
     cursor: pointer;
 }
 
 .close {
     position: absolute;
     top: 20px;
-    right: 30px;
-    font-size: 34px;
+    right: 24px;
+    font-size: 30px;
     cursor: pointer;
+}
+
+/* ===== MOBILE TUNING ===== */
+@media (max-width: 600px) {
+    .gallery-card {
+        height: 170px;
+    }
 }
