@@ -164,6 +164,59 @@ footer{
   }
 }
 
+/* ================= ABOUT SECTION ================= */
+.about-section{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 80px 20px;
+}
+
+.about-card{
+  width: min(900px, 95%);
+  padding: 40px 50px;
+  border-radius: 18px;
+
+  /* Glassmorphism effect */
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+.about-card h2{
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+}
+
+.about-card p{
+  font-size: 17px;
+  line-height: 1.7;
+  margin-bottom: 18px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ================= ABOUT SECTION RESPONSIVE ================= */
+@media (max-width: 768px){
+  .about-card{
+    padding: 30px 25px;
+  }
+
+  .about-card h2{
+    font-size: 26px;
+  }
+
+  .about-card p{
+    font-size: 15px;
+  }
+}
+
 
 
 
