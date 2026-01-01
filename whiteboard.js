@@ -1,100 +1,91 @@
-const canvas=document.getElementById("board");
-const ctx=canvas.getContext("2d");
-canvas.width=3000; canvas.height=2000;
+const canvas = document.getElementById('whiteboard');
+const ctx = canvas.getContext('2d');
 
-let tool="pen",drawing=false,color="#000",size=4;
-let undoStack=[],redoStack=[];
-let theme="light";
+// Set canvas dimensions
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
 
-function saveState(){
-  undoStack.push(canvas.toDataURL());
-  redoStack=[];
+// Variables
+let painting = false;
+let brushColor = '#000000';
+let brushSize = 5;
+let isErasing = false;
+
+// Functions
+function startPainting(e) {
+    painting = true;
+    draw(e);
 }
 
-function undo(){
-  if(!undoStack.length)return;
-  redoStack.push(canvas.toDataURL());
-  let img=new Image();
-  img.src=undoStack.pop();
-  img.onload=()=>ctx.drawImage(img,0,0);
+function stopPainting() {
+    painting = false;
+    ctx.beginPath();  // End the current path
 }
 
-function redo(){
-  if(!redoStack.length)return;
-  undoStack.push(canvas.toDataURL());
-  let img=new Image();
-  img.src=redoStack.pop();
-  img.onload=()=>ctx.drawImage(img,0,0);
+function draw(e) {
+    if (!painting) return;
+
+    ctx.lineWidth = brushSize;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = isErasing ? '#ffffff' : brushColor;
+
+    // Get the mouse position relative to the canvas
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
 }
 
-canvas.addEventListener("mousedown",e=>{
-  if(tool==="text")return createText(e);
-  saveState();
-  drawing=true;
-  ctx.beginPath();
-  ctx.moveTo(e.offsetX,e.offsetY);
+// Event Listeners for buttons and tools
+document.getElementById('penButton').addEventListener('click', () => {
+    isErasing = false;
 });
-canvas.addEventListener("mousemove",e=>{
-  if(!drawing)return;
-  ctx.lineWidth=size;
-  ctx.strokeStyle=color;
-  ctx.lineTo(e.offsetX,e.offsetY);
-  ctx.stroke();
+
+document.getElementById('eraserButton').addEventListener('click', () => {
+    isErasing = true;
 });
-canvas.addEventListener("mouseup",()=>drawing=false);
 
-function setTool(t){tool=t}
-colorPicker.oninput=e=>color=e.target.value;
-sizePicker.oninput=e=>size=e.target.value;
+document.getElementById('colorPicker').addEventListener('input', (e) => {
+    brushColor = e.target.value;
+});
 
-/* TEXT SYSTEM */
-function createText(e){
-  const box=document.createElement("div");
-  box.className="text-editor";
-  box.contentEditable=true;
-  box.style.left=e.offsetX+"px";
-  box.style.top=e.offsetY+"px";
+document.getElementById('brushSize').addEventListener('input', (e) => {
+    brushSize = e.target.value;
+});
 
-  const act=document.createElement("div");
-  act.className="text-actions";
-  act.innerHTML="✅ ❌";
-  box.appendChild(act);
+document.getElementById('clearButton').addEventListener('click', () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+});
 
-  act.children[0].onclick=()=>finalize(box);
-  act.children[1].onclick=()=>box.remove();
+// Mouse events on the canvas
+canvas.addEventListener('mousedown', startPainting);
+canvas.addEventListener('mouseup', stopPainting);
+canvas.addEventListener('mousemove', draw);
 
-  document.body.appendChild(box);
-  box.focus();
-}
+// Touch events for mobile
+canvas.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    const mouseEvent = new MouseEvent('mousedown', {
+        clientX: touch.clientX,
+        clientY: touch.clientY
+    });
+    canvas.dispatchEvent(mouseEvent);
+});
 
-function finalize(box){
-  const text=box.innerText.replace("✅","").replace("❌","").trim();
-  const fixed=document.createElement("div");
-  fixed.className="fixed-text";
-  fixed.innerText=text;
-  fixed.style.left=box.style.left;
-  fixed.style.top=box.style.top;
+canvas.addEventListener('touchend', () => {
+    const mouseEvent = new MouseEvent('mouseup', {});
+    canvas.dispatchEvent(mouseEvent);
+});
 
-  fixed.onclick=()=>{
-    box.innerText=text;
-    document.body.appendChild(box);
-    fixed.remove();
-  };
-
-  document.body.appendChild(fixed);
-  box.remove();
-}
-
-/* THEME */
-function toggleTheme(){
-  theme=theme==="light"?"dark":"light";
-  document.body.className=theme;
-}
-
-/* EXPORT */
-function exportPNG(){
-  const link=document.createElement("a");
-  link.download="whiteboard.png";
-  link.href=canvas.toDataURL();
-  link.click();
-}
+canvas.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    const mouseEvent = new MouseEvent('mousemove', {
+        clientX: touch.clientX,
+        clientY: touch.clientY
+    });
+    canvas.dispatchEvent(mouseEvent);
+});
