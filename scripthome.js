@@ -11,8 +11,11 @@ document.body.insertBefore(searchContainer, document.querySelector('nav'));
 // List of Webb tools from navbar
 const webbTools = [
   { name: "Advanced Resume Builder", link: "indexrb.html" },
-  { name: "Webb", link: "webbtab.html" },
-  { name: "Academic Records and Report Portal", link: "#" }
+  { name: "Chart Maker", link: "chart.html" },
+  { name: "Whiteboard", link: "whiteboard.html" }
+ { name: "Fronto (HTML.CSS.JS)", link: "fronto.html" }
+{ name: "HTML/CSS Editor", link: "codex.html" }
+{ name: "Art Gallery", link: "unigallery.html" }
 ];
 
 // DOM Elements
@@ -48,3 +51,4 @@ document.addEventListener('click', (e) => {
     searchResults.style.display = 'none';
   }
 });
+
