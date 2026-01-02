@@ -1,13 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GoGenix Invoice Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="invoice.css">
+</head>
+<body>
+
+<header class="header">
+    <h1>GoGenix Invoice Generator</h1>
+    <p>Professional | Secure | Instant</p>
+</header>
+
+<div class="container">
+
 <section class="card">
-    <h2>Signature</h2>
-
-    <label class="checkbox">
-        <input type="checkbox" id="digitalSign" onchange="toggleSign(this)">
-        Digitally Signed
-    </label>
-
-    <label class="checkbox">
-        <input type="checkbox" id="manualSign" onchange="toggleSign(this)">
-        Manually Signed
-    </label>
+<h2>Business Details</h2>
+<input id="businessName" placeholder="Business Name">
+<input id="businessAddress" placeholder="Business Address">
+<input id="businessEmail" placeholder="Business Email">
+<input id="businessPhone" placeholder="Business Phone">
 </section>
+
+<section class="card">
+<h2>Client Details</h2>
+<input id="clientName" placeholder="Client Name">
+<input id="clientAddress" placeholder="Client Address">
+<input id="clientEmail" placeholder="Client Email">
+</section>
+
+<section class="card">
+<h2>Invoice Info</h2>
+<input id="invoiceNumber" placeholder="Invoice Number">
+<input type="date" id="invoiceDate">
+<input type="date" id="dueDate">
+</section>
+
+<section class="card">
+<h2>Items</h2>
+<div id="items">
+<div class="item-row">
+<input class="item-name" placeholder="Item Name">
+<input class="item-qty" type="number" placeholder="Qty">
+<input class="item-price" type="number" placeholder="Price">
+</div>
+</div>
+<button class="btn secondary" onclick="addItem()">+ Add Item</button>
+</section>
+
+<section class="card">
+<h2>Tax & Discount</h2>
+<input id="tax" type="number" placeholder="Tax %">
+<input id="discount" type="number" placeholder="Discount %">
+</section>
+
+<section class="card">
+<h2>Signature</h2>
+<label><input type="checkbox" id="digitalSign" onchange="selectSign('digital')"> Digitally Signed</label>
+<label><input type="checkbox" id="manualSign" onchange="selectSign('manual')"> Manually Signed</label>
+</section>
+
+<section class="card">
+<h2>Notes</h2>
+<textarea id="notes" placeholder="Extra notes..."></textarea>
+</section>
+
+<div class="action">
+<button class="btn primary" onclick="generateInvoice()">Generate & Download PDF</button>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="invoice.js"></script>
+</body>
+</html>
