@@ -29,8 +29,8 @@ opacity:.85;
 #alertBox{
 text-align:center;
 margin:15px;
-color:#ffbaba;
 font-weight:600;
+color:#ffbaba;
 }
 
 .container{
@@ -63,7 +63,7 @@ box-shadow:0 25px 40px rgba(0,0,0,.4);
 margin-bottom:12px;
 }
 
-.tool input{
+.tool input, .tool select{
 width:100%;
 padding:10px;
 border-radius:8px;
