@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GoGenix File Converter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="filo.css">
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+
+<body>
+
+<header>
+    <h1>GoGenix File Converter</h1>
+    <p>Professional • Secure • Fast File Conversion</p>
+</header>
+
+<main class="container">
+    <div class="tools">
+
+        <div class="tool">
+            <h3>JPG → PNG</h3>
+            <input type="file" accept="image/jpeg" id="jpgInput">
+            <button onclick="jpgToPng()">Convert & Download</button>
+        </div>
+
+        <div class="tool">
+            <h3>JPG → PDF</h3>
+            <input type="file" accept="image/*" id="jpgPdfInput">
+            <button onclick="jpgToPdf()">Convert & Download</button>
+        </div>
+
+        <div class="tool">
+            <h3>Merge PDF</h3>
+            <input type="file" accept="application/pdf" multiple id="mergePdfInput">
+            <button onclick="mergePdf()">Merge & Download</button>
+        </div>
+
+        <div class="tool">
+            <h3>Compress PDF</h3>
+            <input type="file" accept="application/pdf" id="compressPdfInput">
+            <button onclick="compressPdf()">Compress & Download</button>
+        </div>
+
+    </div>
+</main>
+
+<footer>
+    © 2026 GoGenix Webb • File Utilities Platform
+</footer>
+
+<!-- JS -->
+<script src="filo.js"></script>
+</body>
+</html>
