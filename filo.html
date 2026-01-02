@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>GoGenix File Conversion Tools</title>
+<title>GoGenix File Conversion Suite</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="filo.css">
@@ -23,46 +23,44 @@
 <main class="container">
 <div class="tools">
 
+<!-- JPG → PNG -->
 <div class="tool">
 <h3>JPG → PNG</h3>
 <input type="file" id="jpgToPng" accept="image/jpeg">
-<button onclick="jpgToPng()">Convert</button>
+<button onclick="jpgToPng()">Convert & Download</button>
 </div>
 
+<!-- PNG → JPG -->
 <div class="tool">
 <h3>PNG → JPG</h3>
 <input type="file" id="pngToJpg" accept="image/png">
-<button onclick="pngToJpg()">Convert</button>
+<button onclick="pngToJpg()">Convert & Download</button>
 </div>
 
+<!-- Image → PDF -->
 <div class="tool">
-<h3>JPG → PDF</h3>
-<input type="file" id="jpgToPdf" accept="image/jpeg">
-<button onclick="imageToPdf('jpgToPdf','jpg-image.pdf')">Convert</button>
+<h3>Image → PDF</h3>
+<input type="file" id="imgToPdf" accept="image/*">
+<button onclick="imageToPdf()">Convert & Download</button>
 </div>
 
-<div class="tool">
-<h3>PNG → PDF</h3>
-<input type="file" id="pngToPdf" accept="image/png">
-<button onclick="imageToPdf('pngToPdf','png-image.pdf')">Convert</button>
-</div>
-
-<div class="tool">
-<h3>PDF → JPG</h3>
-<input type="file" id="pdfToJpg" accept="application/pdf">
-<button onclick="pdfToJpg()">Convert</button>
-</div>
-
+<!-- MERGE PDF (2 INPUTS) -->
 <div class="tool">
 <h3>Merge PDFs</h3>
-<input type="file" id="mergePdf" accept="application/pdf" multiple>
-<button onclick="mergePdf()">Merge</button>
+<input type="file" id="mergePdf1" accept="application/pdf">
+<input type="file" id="mergePdf2" accept="application/pdf">
+<button onclick="mergeTwoPdfs()">Merge & Download</button>
 </div>
 
+<!-- COMPRESS PDF -->
 <div class="tool">
 <h3>Compress PDF</h3>
 <input type="file" id="compressPdf" accept="application/pdf">
-<button onclick="compressPdf()">Compress</button>
+<select id="compressLevel">
+    <option value="2">2× Compression</option>
+    <option value="4">4× Compression</option>
+</select>
+<button onclick="compressPdf()">Compress & Download</button>
 </div>
 
 </div>
