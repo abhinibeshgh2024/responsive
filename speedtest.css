@@ -1,0 +1,87 @@
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.speedtest-container {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    width: 320px;
+    color: #fff;
+}
+
+h1 {
+    margin-bottom: 25px;
+    font-size: 22px;
+}
+
+.meter {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin: auto;
+}
+
+svg {
+    transform: rotate(-90deg);
+}
+
+circle {
+    fill: none;
+    stroke-width: 14;
+}
+
+.bg {
+    stroke: rgba(255,255,255,0.15);
+}
+
+.progress {
+    stroke: #00ff88;
+    stroke-dasharray: 691;
+    stroke-dashoffset: 691;
+    transition: stroke-dashoffset 0.3s;
+}
+
+.speed-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.speed-value small {
+    display: block;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+button {
+    margin-top: 20px;
+    padding: 12px 30px;
+    border-radius: 30px;
+    border: none;
+    background: #00ff88;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #00cc70;
+}
+
+.status {
+    margin-top: 15px;
+    font-size: 14px;
+    opacity: 0.8;
+}
