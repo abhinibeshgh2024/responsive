@@ -1,60 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>GoGenix File Converter</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>GoGenix File Conversion Tools</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="filo.css">
+<link rel="stylesheet" href="style.css">
 
-    <!-- Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 
 <body>
 
 <header>
-    <h1>GoGenix File Converter</h1>
-    <p>Professional • Secure • Fast File Conversion</p>
+    <h1>GoGenix File Conversion Suite</h1>
+    <p>Secure • Browser-Based • Professional Utilities</p>
 </header>
 
+<div id="alertBox"></div>
+
 <main class="container">
-    <div class="tools">
+<div class="tools">
 
-        <div class="tool">
-            <h3>JPG → PNG</h3>
-            <input type="file" accept="image/jpeg" id="jpgInput">
-            <button onclick="jpgToPng()">Convert & Download</button>
-        </div>
+<div class="tool">
+<h3>JPG → PNG</h3>
+<input type="file" id="jpgToPng" accept="image/jpeg">
+<button onclick="jpgToPng()">Convert</button>
+</div>
 
-        <div class="tool">
-            <h3>JPG → PDF</h3>
-            <input type="file" accept="image/*" id="jpgPdfInput">
-            <button onclick="jpgToPdf()">Convert & Download</button>
-        </div>
+<div class="tool">
+<h3>PNG → JPG</h3>
+<input type="file" id="pngToJpg" accept="image/png">
+<button onclick="pngToJpg()">Convert</button>
+</div>
 
-        <div class="tool">
-            <h3>Merge PDF</h3>
-            <input type="file" accept="application/pdf" multiple id="mergePdfInput">
-            <button onclick="mergePdf()">Merge & Download</button>
-        </div>
+<div class="tool">
+<h3>JPG → PDF</h3>
+<input type="file" id="jpgToPdf" accept="image/jpeg">
+<button onclick="imageToPdf('jpgToPdf','jpg-image.pdf')">Convert</button>
+</div>
 
-        <div class="tool">
-            <h3>Compress PDF</h3>
-            <input type="file" accept="application/pdf" id="compressPdfInput">
-            <button onclick="compressPdf()">Compress & Download</button>
-        </div>
+<div class="tool">
+<h3>PNG → PDF</h3>
+<input type="file" id="pngToPdf" accept="image/png">
+<button onclick="imageToPdf('pngToPdf','png-image.pdf')">Convert</button>
+</div>
 
-    </div>
+<div class="tool">
+<h3>PDF → JPG</h3>
+<input type="file" id="pdfToJpg" accept="application/pdf">
+<button onclick="pdfToJpg()">Convert</button>
+</div>
+
+<div class="tool">
+<h3>Merge PDFs</h3>
+<input type="file" id="mergePdf" accept="application/pdf" multiple>
+<button onclick="mergePdf()">Merge</button>
+</div>
+
+<div class="tool">
+<h3>Compress PDF</h3>
+<input type="file" id="compressPdf" accept="application/pdf">
+<button onclick="compressPdf()">Compress</button>
+</div>
+
+</div>
 </main>
 
 <footer>
-    © 2026 GoGenix Webb • File Utilities Platform
+© 2026 GoGenix Webb • Open-Source Powered Utilities
 </footer>
 
-<!-- JS -->
-<script src="filo.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
