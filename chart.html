@@ -2,59 +2,61 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Webb | Chart Maker</title>
+  <title>Wrbb | Chart Maker Pro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="chart.css">
 </head>
 <body>
 
-<header>
-   <img src="WEBB-removebg-preview.png" width="160px" height="150px" style="align-items: center; justify-content:center" ></img>
-  <h1>Webb Chart Maker</h1>
-  <p>Accurate • Reliable • Responsive</p>
+<header class="glass header">
+  <img src="WEBB-removebg-preview.png" width="120">
+  <div>
+    <h1>Webb Chart Maker</h1>
+    <p>Accurate • Reliable • Responsive</p>
+  </div>
 </header>
 
 <main class="container">
 
-  <section class="input-panel">
+  <!-- INPUT PANEL -->
+  <section class="input-panel glass">
     <h2>Chart Configuration</h2>
 
     <label>Chart Title</label>
-    <input type="text" id="chartTitle" placeholder="Enter chart title">
-
-    <label>Chart Description</label>
-    <textarea id="chartDesc" placeholder="Short description"></textarea>
+    <input id="chartTitle" placeholder="Enter chart title">
 
     <label>Chart Type</label>
     <select id="chartType">
-      <option value="bar">Bar Chart</option>
-      <option value="line">Line Chart</option>
-      <option value="pie">Pie Chart</option>
+      <option value="bar">Bar</option>
+      <option value="line">Line</option>
+      <option value="pie">Pie</option>
     </select>
 
-    <h3>Data Input</h3>
+    <h3>Datasets</h3>
+    <div id="datasets"></div>
 
-    <div id="dataTable"></div>
+    <button onclick="addDataset()">➕ Add Dataset</button>
 
-    <button onclick="addRow()">➕ Add Data Row</button>
-    <button onclick="generateChart()">📈 Generate Chart</button>
+    <div class="btn-group">
+      <button onclick="generateChart()">📊 Generate Chart</button>
+      <button onclick="exportPDF()">⬇ Export PDF</button>
+    </div>
 
     <div id="error"></div>
   </section>
 
-  <section class="chart-panel">
+  <!-- PREVIEW PANEL -->
+  <section class="chart-panel glass" id="printArea">
     <canvas id="chartCanvas"></canvas>
   </section>
 
 </main>
 
-<footer>
+<footer class="glass footer">
   <p>Built with discipline & correctness</p>
 </footer>
 
-<!-- Chart.js – REQUIRED -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="chart.js"></script>
-
 </body>
 </html>
