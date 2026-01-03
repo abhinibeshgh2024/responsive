@@ -1,82 +1,76 @@
-let chartInstance = null;
+let chart;
+const dataTable = document.getElementById("dataTable");
+const errorBox = document.getElementById("error");
 
-// PAGE LOAD HOTE HI EK ROW
-window.onload = function () {
-  addRow();
-};
+addRow(); // initial row
 
 function addRow() {
-  const table = document.getElementById("dataTable");
-
   const row = document.createElement("div");
-  row.className = "row";
+  row.className = "data-row";
+  row.innerHTML = `
+    <input type="text" placeholder="Label">
+    <input type="number" placeholder="Value">
+  `;
+  dataTable.appendChild(row);
+}
 
-  const labelInput = document.createElement("input");
-  labelInput.type = "text";
-  labelInput.placeholder = "Label";
-
-  const valueInput = document.createElement("input");
-  valueInput.type = "number";
-  valueInput.placeholder = "Value";
-
-  row.appendChild(labelInput);
-  row.appendChild(valueInput);
-  table.appendChild(row);
+function generateColors(count) {
+  const colors = [];
+  for (let i = 0; i < count; i++) {
+    const hue = Math.floor((360 / count) * i);
+    colors.push(`hsl(${hue}, 70%, 55%)`);
+  }
+  return colors;
 }
 
 function generateChart() {
-  const rows = document.querySelectorAll(".row");
-  const labels = [];
-  const values = [];
+  errorBox.textContent = "";
 
   const title = document.getElementById("chartTitle").value;
-  const desc = document.getElementById("chartDesc").value;
   const type = document.getElementById("chartType").value;
-  const errorBox = document.getElementById("error");
+  const rows = document.querySelectorAll(".data-row");
 
-  errorBox.innerText = "";
+  let labels = [];
+  let values = [];
 
   rows.forEach(row => {
-    const label = row.children[0].value.trim();
-    const value = row.children[1].value;
-
-    if (label !== "" && value !== "") {
-      labels.push(label);
-      values.push(Number(value));
+    const inputs = row.querySelectorAll("input");
+    if (inputs[0].value && inputs[1].value) {
+      labels.push(inputs[0].value);
+      values.push(Number(inputs[1].value));
     }
   });
 
   if (labels.length === 0) {
-    errorBox.innerText = "At least one valid data row is required.";
+    errorBox.textContent = "Please enter at least one valid data row.";
     return;
   }
 
+  const colors = generateColors(values.length);
+
+  if (chart) chart.destroy();
+
   const ctx = document.getElementById("chartCanvas").getContext("2d");
-
-  if (chartInstance) {
-    chartInstance.destroy();
-  }
-
-  chartInstance = new Chart(ctx, {
+  chart = new Chart(ctx, {
     type: type,
     data: {
       labels: labels,
       datasets: [{
-        label: desc || "Chart Data",
+        label: title || "Dataset",
         data: values,
-        backgroundColor: "#00bfff",
-        borderColor: "#00bfff"
+        backgroundColor: colors,
+        borderColor: colors,
+        borderWidth: 2,
+        fill: false
       }]
     },
     options: {
       responsive: true,
       plugins: {
+        legend: { display: true },
         title: {
-          display: true,
-          text: title || "Chart Maker Output"
-        },
-        legend: {
-          display: true
+          display: !!title,
+          text: title
         }
       }
     }
