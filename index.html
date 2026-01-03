@@ -52,20 +52,36 @@ GoGenix Webb stands for clarity, accessibility, and long-term usability—bringi
   <div class="analytics-box">
     <h2>Website Analytics</h2>
 
-    <!-- LIVE USERS -->
-    <div class="live-users">
-        🟢 Live Users: <span id="liveUsers">0</span>
+    <!-- COUNTS -->
+    <div class="count-grid">
+        <div class="count-box">
+            <span id="dailyCount">0</span>
+            <small>Today</small>
+        </div>
+        <div class="count-box">
+            <span id="weeklyCount">0</span>
+            <small>This Week</small>
+        </div>
+        <div class="count-box">
+            <span id="monthlyCount">0</span>
+            <small>This Month</small>
+        </div>
+        <div class="count-box">
+            <span id="yearlyCount">0</span>
+            <small>This Year</small>
+        </div>
     </div>
 
     <!-- GRAPH -->
     <canvas id="visitorChart"></canvas>
 
     <!-- COUNTRY DATA -->
-    <h3>Country Wise Visitors</h3>
+    <h3>Country Wise Users</h3>
     <div id="countryList" class="country-list"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 
 
@@ -80,6 +96,7 @@ GoGenix Webb stands for clarity, accessibility, and long-term usability—bringi
 
 </body>
 </html>
+
 
 
 
