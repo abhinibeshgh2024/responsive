@@ -21,36 +21,34 @@ function previewPhoto(e){
   }
 });
 
-// ROW MANAGEMENT FUNCTIONS
+// FUNCTION TO CREATE ROWS WITH LINKED PREVIEW
 function createInputRow(sectionId, previewId, rowHTML, formatFunc){
   const div = document.createElement("div");
   div.className = "row-input";
   div.innerHTML = rowHTML;
+  
   const previewUl = document.getElementById(previewId);
-
-  // REMOVE button auto remove from preview too
-  div.querySelector("button").onclick = ()=>{
-    div.remove();
-    // remove corresponding li in preview
-    previewUl.removeChild(previewUl.lastChild);
-  };
-
-  div.querySelectorAll("input,textarea").forEach(inp=>{
-    inp.oninput = ()=>{
-      // update last li in preview with new value
-      const data = Array.from(div.querySelectorAll("input,textarea")).map(i=>i.value).filter(Boolean);
-      if(data.length){
-        const lastLi = previewUl.lastChild;
-        if(lastLi) lastLi.innerHTML = formatFunc(data);
-      }
-    }
-  });
-
-  document.getElementById(sectionId).appendChild(div);
-  // create preview li
+  
+  // create corresponding preview li
   const li = document.createElement("li");
   li.innerHTML = formatFunc(Array.from(div.querySelectorAll("input,textarea")).map(i=>i.value).filter(Boolean));
   previewUl.appendChild(li);
+
+  // attach input events to update preview live
+  div.querySelectorAll("input,textarea").forEach(inp=>{
+    inp.oninput = ()=>{
+      const data = Array.from(div.querySelectorAll("input,textarea")).map(i=>i.value).filter(Boolean);
+      li.innerHTML = formatFunc(data);
+    }
+  });
+
+  // REMOVE button to delete input row AND preview li
+  div.querySelector("button").onclick = ()=>{
+    previewUl.removeChild(li);
+    div.remove();
+  };
+
+  document.getElementById(sectionId).appendChild(div);
 }
 
 // EDUCATION
