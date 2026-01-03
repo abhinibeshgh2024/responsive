@@ -21,82 +21,60 @@ function previewPhoto(e){
   }
 });
 
-// UTILITY: ADD ROW DATA AND EDIT/REMOVE
-function addRow(sectionId, rowClass, previewId, formatFunc){
-  const section = document.getElementById(sectionId);
-  const rows = section.getElementsByClassName(rowClass);
+// ROW MANAGEMENT FUNCTIONS
+function createInputRow(sectionId, rowHTML){
+  const div = document.createElement("div");
+  div.className = "row-input";
+  div.innerHTML = rowHTML;
+  document.getElementById(sectionId).appendChild(div);
+}
+
+function addRow(sectionId, previewId, rowClass, formatFunc){
+  const rows = document.getElementById(sectionId).getElementsByClassName("row-input");
   Array.from(rows).forEach(row=>{
-    const data = Array.from(row.querySelectorAll("input,textarea")).map(i=>i.value).filter(Boolean);
+    const inputs = row.querySelectorAll("input,textarea");
+    const data = Array.from(inputs).map(i=>i.value).filter(Boolean);
     if(data.length){
-      const li = document.createElement("li");
-      li.innerHTML = formatFunc(data);
-      // EDIT BUTTON
-      const editBtn = document.createElement("button");
-      editBtn.textContent="Edit";
-      editBtn.style.marginLeft="10px";
-      editBtn.onclick=()=>{
-        row.querySelectorAll("input,textarea").forEach((i,idx)=>i.value=data[idx]);
-        li.remove();
-      };
-      // REMOVE BUTTON
-      const remBtn=document.createElement("button");
-      remBtn.textContent="Remove";
-      remBtn.style.marginLeft="5px";
-      remBtn.onclick=()=>li.remove();
-      li.appendChild(editBtn);
-      li.appendChild(remBtn);
-      document.getElementById(previewId).appendChild(li);
+      document.getElementById(previewId).innerHTML += `<li>${formatFunc(data)}</li>`;
     }
   });
 }
 
 // EDUCATION
 function addEducationRow(){
-  addRow("edu-section","edu-row","p-education", d=>`<b>${d[0]}</b>, ${d[1]} – ${d[2]} (${d[3]})`);
-  // ADD NEW INPUT ROW
-  const div=document.createElement("div"); div.className="edu-row";
-  div.innerHTML=`<input placeholder="Institute" class="eduInstitute"><input placeholder="Course / Degree" class="eduCourse"><input placeholder="City" class="eduCity"><input placeholder="Batch (e.g. 2021–2025)" class="eduBatch">`;
-  document.getElementById("edu-section").appendChild(div);
+  createInputRow("edu-section", `<input placeholder="Institute"><input placeholder="Course / Degree"><input placeholder="City"><input placeholder="Batch (e.g. 2021–2025)">
+    <button onclick="this.parentElement.remove()">Remove</button>`);
+  addRow("edu-section","p-education","edu-row",d=>`<b>${d[0]}</b>, ${d[1]} – ${d[2]} (${d[3]})`);
 }
 
 // EXPERIENCE
 function addExperienceRow(){
-  addRow("exp-section","exp-row","p-experience", d=>`<b>${d[0]}</b> – ${d[1]} (${d[2]})<br>${d[3]}`);
-  const div=document.createElement("div"); div.className="exp-row";
-  div.innerHTML=`<input placeholder="Company Name" class="expCompany"><input placeholder="Role / Position" class="expRole"><input placeholder="Duration" class="expDuration"><textarea placeholder="Work Description" class="expDesc"></textarea>`;
-  document.getElementById("exp-section").appendChild(div);
+  createInputRow("exp-section", `<input placeholder="Company Name"><input placeholder="Role / Position"><input placeholder="Duration"><textarea placeholder="Work Description"></textarea><button onclick="this.parentElement.remove()">Remove</button>`);
+  addRow("exp-section","p-experience","exp-row",d=>`<b>${d[0]}</b> – ${d[1]} (${d[2]})<br>${d[3]}`);
 }
 
 // SKILLS
 function addSkillRow(){
-  addRow("skill-section","skill-row","p-skills", d=>d[0]);
-  const div=document.createElement("div"); div.className="skill-row";
-  div.innerHTML=`<input placeholder="Skill (e.g. Java, AI, SQL)" class="skillInput">`;
-  document.getElementById("skill-section").appendChild(div);
+  createInputRow("skill-section", `<input placeholder="Skill"><button onclick="this.parentElement.remove()">Remove</button>`);
+  addRow("skill-section","p-skills","skill-row",d=>d[0]);
 }
 
 // PROJECTS
 function addProjectRow(){
-  addRow("proj-section","proj-row","p-projects", d=>`<b>${d[0]}</b>: ${d[1]}`);
-  const div=document.createElement("div"); div.className="proj-row";
-  div.innerHTML=`<input placeholder="Project Title" class="projTitle"><textarea placeholder="Project Description" class="projDesc"></textarea>`;
-  document.getElementById("proj-section").appendChild(div);
+  createInputRow("proj-section", `<input placeholder="Project Title"><textarea placeholder="Project Description"></textarea><button onclick="this.parentElement.remove()">Remove</button>`);
+  addRow("proj-section","p-projects","proj-row",d=>`<b>${d[0]}</b>: ${d[1]}`);
 }
 
 // PUBLICATIONS
 function addPublicationRow(){
-  addRow("pub-section","pub-row","p-publications", d=>`<b>${d[0]}</b>, ${d[1]}, ${d[2]}`);
-  const div=document.createElement("div"); div.className="pub-row";
-  div.innerHTML=`<input placeholder="Paper Title" class="pubTitle"><input placeholder="Journal Name" class="pubJournal"><input placeholder="Volume / Issue / Year" class="pubVolume">`;
-  document.getElementById("pub-section").appendChild(div);
+  createInputRow("pub-section", `<input placeholder="Paper Title"><input placeholder="Journal Name"><input placeholder="Volume / Issue / Year"><button onclick="this.parentElement.remove()">Remove</button>`);
+  addRow("pub-section","p-publications","pub-row",d=>`<b>${d[0]}</b>, ${d[1]}, ${d[2]}`);
 }
 
 // CERTIFICATIONS
 function addCertificationRow(){
-  addRow("cert-section","cert-row","p-certifications", d=>`<b>${d[0]}</b>, ${d[1]}, ${d[2]}`);
-  const div=document.createElement("div"); div.className="cert-row";
-  div.innerHTML=`<input placeholder="Certificate Name" class="certName"><input placeholder="Organization" class="certOrg"><input placeholder="Year" class="certYear">`;
-  document.getElementById("cert-section").appendChild(div);
+  createInputRow("cert-section", `<input placeholder="Certificate Name"><input placeholder="Organization"><input placeholder="Year"><button onclick="this.parentElement.remove()">Remove</button>`);
+  addRow("cert-section","p-certifications","cert-row",d=>`<b>${d[0]}</b>, ${d[1]}, ${d[2]}`);
 }
 
 // COVER LETTER
@@ -120,5 +98,3 @@ ${name}`;
 
 // DOWNLOAD PDF
 function downloadPDF(){ window.print(); }
-
-
