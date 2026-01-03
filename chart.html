@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Webb | Chart Maker Pro</title>
+  <title>Webb | Chart Maker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="chart.css">
 </head>
 <body>
 
 <header class="glass header">
-  <img src="WEBB-removebg-preview.png" width="120">
+  <img src="WEBB-removebg-preview.png" width="110">
   <div>
-    <h2>Webb Chart Maker</h2>
+    <h1>Webb Chart Maker</h1>
     <p>Accurate • Reliable • Responsive</p>
   </div>
 </header>
@@ -36,18 +36,18 @@
     <div id="datasets"></div>
 
     <button onclick="addDataset()">➕ Add Dataset</button>
-
-    <div class="btn-group">
-      <button onclick="generateChart()">📊 Generate Chart</button>
-      <button onclick="exportPDF()">⬇ Export PDF</button>
-    </div>
-
-    <div id="error"></div>
   </section>
 
-  <!-- PREVIEW PANEL -->
+  <!-- CHART PREVIEW -->
   <section class="chart-panel glass" id="printArea">
     <canvas id="chartCanvas"></canvas>
+  </section>
+
+  <!-- ACTION BUTTONS -->
+  <section class="action-panel glass">
+    <button onclick="generateChart()">📊 Generate Chart</button>
+    <button onclick="exportPDF()">⬇ Export PDF</button>
+    <div id="error"></div>
   </section>
 
 </main>
