@@ -22,78 +22,78 @@ function previewPhoto(e){
 });
 
 // ROW MANAGEMENT FUNCTIONS
-function createInputRow(sectionId, rowHTML){
+function createInputRow(sectionId, previewId, rowHTML, formatFunc){
   const div = document.createElement("div");
   div.className = "row-input";
   div.innerHTML = rowHTML;
-  document.getElementById(sectionId).appendChild(div);
-}
+  const previewUl = document.getElementById(previewId);
 
-function addRow(sectionId, previewId, rowClass, formatFunc){
-  const rows = document.getElementById(sectionId).getElementsByClassName("row-input");
-  Array.from(rows).forEach(row=>{
-    const inputs = row.querySelectorAll("input,textarea");
-    const data = Array.from(inputs).map(i=>i.value).filter(Boolean);
-    if(data.length){
-      document.getElementById(previewId).innerHTML += `<li>${formatFunc(data)}</li>`;
+  // REMOVE button auto remove from preview too
+  div.querySelector("button").onclick = ()=>{
+    div.remove();
+    // remove corresponding li in preview
+    previewUl.removeChild(previewUl.lastChild);
+  };
+
+  div.querySelectorAll("input,textarea").forEach(inp=>{
+    inp.oninput = ()=>{
+      // update last li in preview with new value
+      const data = Array.from(div.querySelectorAll("input,textarea")).map(i=>i.value).filter(Boolean);
+      if(data.length){
+        const lastLi = previewUl.lastChild;
+        if(lastLi) lastLi.innerHTML = formatFunc(data);
+      }
     }
   });
+
+  document.getElementById(sectionId).appendChild(div);
+  // create preview li
+  const li = document.createElement("li");
+  li.innerHTML = formatFunc(Array.from(div.querySelectorAll("input,textarea")).map(i=>i.value).filter(Boolean));
+  previewUl.appendChild(li);
 }
 
 // EDUCATION
 function addEducationRow(){
-  createInputRow("edu-section", `<input placeholder="Institute"><input placeholder="Course / Degree"><input placeholder="City"><input placeholder="Batch (e.g. 2021–2025)">
-    <button onclick="this.parentElement.remove()">Remove</button>`);
-  addRow("edu-section","p-education","edu-row",d=>`<b>${d[0]}</b>, ${d[1]} – ${d[2]} (${d[3]})`);
+  createInputRow("edu-section","p-education",
+    `<input placeholder="Institute"><input placeholder="Course / Degree"><input placeholder="City"><input placeholder="Batch (e.g. 2021–2025)">
+     <button>Remove</button>`,
+    d=>`<b>${d[0]}</b>, ${d[1]} – ${d[2]} (${d[3]})`);
 }
 
 // EXPERIENCE
 function addExperienceRow(){
-  createInputRow("exp-section", `<input placeholder="Company Name"><input placeholder="Role / Position"><input placeholder="Duration"><textarea placeholder="Work Description"></textarea><button onclick="this.parentElement.remove()">Remove</button>`);
-  addRow("exp-section","p-experience","exp-row",d=>`<b>${d[0]}</b> – ${d[1]} (${d[2]})<br>${d[3]}`);
+  createInputRow("exp-section","p-experience",
+    `<input placeholder="Company Name"><input placeholder="Role / Position"><input placeholder="Duration"><textarea placeholder="Work Description"></textarea><button>Remove</button>`,
+    d=>`<b>${d[0]}</b> – ${d[1]} (${d[2]})<br>${d[3]}`);
 }
 
 // SKILLS
 function addSkillRow(){
-  createInputRow("skill-section", `<input placeholder="Skill"><button onclick="this.parentElement.remove()">Remove</button>`);
-  addRow("skill-section","p-skills","skill-row",d=>d[0]);
+  createInputRow("skill-section","p-skills",
+    `<input placeholder="Skill"><button>Remove</button>`,
+    d=>d[0]);
 }
 
 // PROJECTS
 function addProjectRow(){
-  createInputRow("proj-section", `<input placeholder="Project Title"><textarea placeholder="Project Description"></textarea><button onclick="this.parentElement.remove()">Remove</button>`);
-  addRow("proj-section","p-projects","proj-row",d=>`<b>${d[0]}</b>: ${d[1]}`);
+  createInputRow("proj-section","p-projects",
+    `<input placeholder="Project Title"><textarea placeholder="Project Description"></textarea><button>Remove</button>`,
+    d=>`<b>${d[0]}</b>: ${d[1]}`);
 }
 
 // PUBLICATIONS
 function addPublicationRow(){
-  createInputRow("pub-section", `<input placeholder="Paper Title"><input placeholder="Journal Name"><input placeholder="Volume / Issue / Year"><button onclick="this.parentElement.remove()">Remove</button>`);
-  addRow("pub-section","p-publications","pub-row",d=>`<b>${d[0]}</b>, ${d[1]}, ${d[2]}`);
+  createInputRow("pub-section","p-publications",
+    `<input placeholder="Paper Title"><input placeholder="Journal Name"><input placeholder="Volume / Issue / Year"><button>Remove</button>`,
+    d=>`<b>${d[0]}</b>, ${d[1]}, ${d[2]}`);
 }
 
 // CERTIFICATIONS
 function addCertificationRow(){
-  createInputRow("cert-section", `<input placeholder="Certificate Name"><input placeholder="Organization"><input placeholder="Year"><button onclick="this.parentElement.remove()">Remove</button>`);
-  addRow("cert-section","p-certifications","cert-row",d=>`<b>${d[0]}</b>, ${d[1]}, ${d[2]}`);
-}
-
-// COVER LETTER
-function generateCoverLetter(){
-  const name=document.getElementById("name").value||"Your Name";
-  const role=document.getElementById("coverRole").value||"Position";
-  const company=document.getElementById("coverCompany").value||"Company";
-  const email=document.getElementById("email").value;
-  const phone=document.getElementById("phone").value;
-  const letter=`Dear Hiring Manager,
-
-My name is ${name}, and I am excited to apply for the ${role} role at ${company}. I have relevant experience and skills that align with your organization's needs.
-
-Please contact me at ${email} or ${phone}.
-
-Sincerely,
-${name}`;
-  document.getElementById("generated-letter").textContent=letter;
-  document.getElementById("cover-letter-preview").style.display="block";
+  createInputRow("cert-section","p-certifications",
+    `<input placeholder="Certificate Name"><input placeholder="Organization"><input placeholder="Year"><button>Remove</button>`,
+    d=>`<b>${d[0]}</b>, ${d[1]}, ${d[2]}`);
 }
 
 // DOWNLOAD PDF
