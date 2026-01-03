@@ -2,38 +2,239 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Webb Whiteboard</title>
+<title>Webb | Whiteboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="whiteboard.css">
+
+<!-- PDF Export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* ===== BODY BG ===== */
+body{
+    min-height:100vh;
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+}
+
+/* ===== HEADER (CHART STYLE) ===== */
+header{
+    background: transparent;
+    text-align:center;
+    padding:20px 10px;
+}
+
+header img{
+    width:130px;
+    height:auto;
+    margin-bottom:8px;
+}
+
+header h1{
+    font-size:28px;
+    font-weight:600;
+}
+
+header p{
+    font-size:14px;
+    opacity:0.85;
+}
+
+/* ===== MAIN ===== */
+.main{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    padding:20px;
+}
+
+/* ===== GLASS PANEL ===== */
+.glass{
+    width:100%;
+    max-width:1100px;
+    padding:20px;
+    border-radius:18px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(14px);
+    box-shadow:0 8px 30px rgba(0,0,0,0.3);
+}
+
+/* ===== TOOLS ===== */
+.tools{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-bottom:15px;
+}
+
+.tools button,
+.tools input{
+    padding:10px 14px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.tools button{
+    background:#ffffff;
+}
+
+.tools input[type="color"]{
+    padding:4px;
+    height:42px;
+    width:50px;
+}
+
+/* ===== CANVAS ===== */
+.board-container{
+    background: rgba(0,0,0,0.35);
+    padding:15px;
+    border-radius:15px;
+}
+
+canvas{
+    background:#ffffff;
+    border-radius:12px;
+    width:100%;
+    height:450px;
+    cursor:crosshair;
+}
+
+/* ===== FOOTER LABEL ===== */
+.footer-label{
+    text-align:center;
+    margin-top:10px;
+    font-size:13px;
+    opacity:0.8;
+}
+</style>
 </head>
+
 <body>
 
-<div class="app">
-    <div class="toolbar glass">
-        <button onclick="setTool('pen')">✍️ Pen</button>
-        <button onclick="setTool('marker')">🖊 Marker</button>
-        <button onclick="setTool('eraser')">🧽 Eraser</button>
+<!-- ===== HEADER ===== -->
+<header>
+    <img src="WEBB-removebg-preview.png" alt="Webb Logo">
+    <h1>Webb Whiteboard</h1>
+    <p>Clean • Interactive • Reliable</p>
+</header>
 
-        <button onclick="setShape('line')">📏 Line</button>
-        <button onclick="setShape('rect')">⬛ Rect</button>
-        <button onclick="setShape('circle')">⚪ Circle</button>
+<div class="main">
+<div class="glass" id="exportArea">
 
+    <!-- TOOLS -->
+    <div class="tools">
+        <button onclick="setTool('pen')">Pen</button>
+        <button onclick="setTool('eraser')">Eraser</button>
+        <button onclick="setTool('rect')">Rectangle</button>
+        <button onclick="setTool('circle')">Circle</button>
         <input type="color" id="colorPicker">
-        <input type="range" id="sizePicker" min="1" max="30" value="4">
-
-        <label class="upload">
-            🖼 Image
-            <input type="file" accept="image/*" hidden onchange="insertImage(event)">
-        </label>
-
-        <button onclick="clearBoard()">🧹 Clear</button>
+        <button onclick="clearBoard()">Clear</button>
+        <button onclick="exportPDF()">Export PDF</button>
     </div>
 
-    <div class="board glass">
-        <canvas id="canvas"></canvas>
+    <!-- CANVAS -->
+    <div class="board-container">
+        <canvas id="board"></canvas>
     </div>
+
+    <div class="footer-label">
+        Built with discipline & correctness
+    </div>
+
+</div>
 </div>
 
-<script src="whiteboard.js"></script>
+<script>
+const canvas = document.getElementById("board");
+const ctx = canvas.getContext("2d");
+
+canvas.width = canvas.offsetWidth;
+canvas.height = 450;
+
+let drawing = false;
+let tool = "pen";
+let startX, startY;
+let color = "#000000";
+
+document.getElementById("colorPicker").addEventListener("change", e=>{
+    color = e.target.value;
+});
+
+/* TOOL */
+function setTool(t){
+    tool = t;
+}
+
+/* DRAW EVENTS */
+canvas.addEventListener("mousedown", e=>{
+    drawing = true;
+    startX = e.offsetX;
+    startY = e.offsetY;
+
+    if(tool === "pen"){
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+    }
+});
+
+canvas.addEventListener("mousemove", e=>{
+    if(!drawing) return;
+
+    if(tool === "pen"){
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+    }
+
+    if(tool === "eraser"){
+        ctx.clearRect(e.offsetX-8, e.offsetY-8, 16, 16);
+    }
+});
+
+canvas.addEventListener("mouseup", e=>{
+    drawing = false;
+
+    if(tool === "rect"){
+        ctx.strokeStyle = color;
+        ctx.strokeRect(startX, startY, e.offsetX-startX, e.offsetY-startY);
+    }
+
+    if(tool === "circle"){
+        ctx.strokeStyle = color;
+        ctx.beginPath();
+        const r = Math.hypot(e.offsetX-startX, e.offsetY-startY);
+        ctx.arc(startX, startY, r, 0, Math.PI*2);
+        ctx.stroke();
+    }
+});
+
+/* CLEAR */
+function clearBoard(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+/* EXPORT PDF */
+function exportPDF(){
+    html2pdf().from(document.getElementById("exportArea")).set({
+        margin:0.4,
+        filename:"Webb_Whiteboard.pdf",
+        html2canvas:{scale:2},
+        jsPDF:{unit:"in", format:"a4", orientation:"portrait"}
+    }).save();
+}
+</script>
+
 </body>
+</html>
 </html>
