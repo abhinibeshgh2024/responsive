@@ -1,61 +1,105 @@
-const canvas = document.getElementById('whiteboard');
-const ctx = canvas.getContext('2d');
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+let tool = "pen";
+let shape = null;
 let drawing = false;
-let erase = false;
+let startX, startY;
 
-canvas.width = canvas.offsetWidth;
-canvas.height = canvas.offsetHeight;
+function resizeCanvas() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
 
-const penColor = document.getElementById('penColor');
-const penSize = document.getElementById('penSize');
-const penType = document.getElementById('penType');
-const mediaInput = document.getElementById('mediaInput');
+const colorPicker = document.getElementById("colorPicker");
+const sizePicker = document.getElementById("sizePicker");
 
-canvas.addEventListener('mousedown', e => { drawing = true; draw(e); });
-canvas.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
-canvas.addEventListener('mouseout', () => { drawing = false; ctx.beginPath(); });
-canvas.addEventListener('mousemove', draw);
-
-function draw(e){
-  if(!drawing) return;
-  ctx.lineWidth = penSize.value;
-  ctx.lineCap = penType.value;
-  ctx.strokeStyle = erase ? '#ffffff' : penColor.value;
-
-  ctx.lineTo(e.offsetX, e.offsetY);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(e.offsetX, e.offsetY);
+function setTool(t) {
+    tool = t;
+    shape = null;
 }
 
-function eraseMode(){ erase = !erase; }
-
-function clearCanvas(){ ctx.clearRect(0,0,canvas.width,canvas.height); }
-
-function downloadCanvas(){
-  const link = document.createElement('a');
-  link.download = 'whiteboard.png';
-  link.href = canvas.toDataURL();
-  link.click();
+function setShape(s) {
+    shape = s;
+    tool = "shape";
 }
 
-// INSERT MEDIA
-mediaInput.addEventListener('change', e => {
-  const file = e.target.files[0];
-  if(!file) return;
-  const url = URL.createObjectURL(file);
-
-  if(file.type.startsWith('image')){
-    const img = new Image();
-    img.onload = ()=> ctx.drawImage(img,50,50,img.width/2,img.height/2);
-    img.src = url;
-  } else if(file.type.startsWith('video')){
-    const vid = document.createElement('video');
-    vid.src = url;
-    vid.muted = true;
-    vid.play();
-    vid.onplay = ()=>{
-      ctx.drawImage(vid,50,50,vid.videoWidth/2, vid.videoHeight/2);
-    }
-  }
+canvas.addEventListener("pointerdown", (e) => {
+    drawing = true;
+    startX = e.offsetX;
+    startY = e.offsetY;
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
 });
+
+canvas.addEventListener("pointermove", (e) => {
+    if (!drawing) return;
+
+    if (tool === "pen" || tool === "marker") {
+        ctx.globalCompositeOperation = "source-over";
+        ctx.strokeStyle = colorPicker.value;
+        ctx.lineWidth = tool === "marker" ? sizePicker.value * 2 : sizePicker.value;
+        ctx.lineCap = "round";
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+    }
+
+    if (tool === "eraser") {
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.lineWidth = sizePicker.value * 2;
+        ctx.lineCap = "round";
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+    }
+});
+
+canvas.addEventListener("pointerup", (e) => {
+    if (!drawing) return;
+    drawing = false;
+
+    if (tool === "shape" && shape) {
+        ctx.globalCompositeOperation = "source-over";
+        ctx.strokeStyle = colorPicker.value;
+        ctx.lineWidth = sizePicker.value;
+
+        const endX = e.offsetX;
+        const endY = e.offsetY;
+
+        if (shape === "line") {
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.stroke();
+        }
+
+        if (shape === "rect") {
+            ctx.strokeRect(startX, startY, endX - startX, endY - startY);
+        }
+
+        if (shape === "circle") {
+            const radius = Math.hypot(endX - startX, endY - startY);
+            ctx.beginPath();
+            ctx.arc(startX, startY, radius, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+    }
+
+    ctx.beginPath();
+});
+
+function clearBoard() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function insertImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const img = new Image();
+    img.onload = () => {
+        ctx.drawImage(img, 50, 50, img.width / 2, img.height / 2);
+    };
+    img.src = URL.createObjectURL(file);
+}
