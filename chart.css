@@ -26,6 +26,7 @@ body {
   text-align: center;
   margin: 20px;
   padding: 24px;
+  background: transparent;
 }
 
 .header img {
