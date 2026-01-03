@@ -1,4 +1,5 @@
 * { box-sizing: border-box; }
+
 body {
   margin: 0;
   font-family: "Segoe UI", sans-serif;
@@ -76,8 +77,6 @@ button {
 }
 
 section { margin-top:1.5rem; border-bottom:1px dashed #ccc; padding-bottom:0.5rem; }
-
-#cover-letter-preview { background:#f5f5f5; padding:1rem; border-radius:8px; }
 
 @media screen and (max-width:768px){
   .container{ flex-direction:column; }
