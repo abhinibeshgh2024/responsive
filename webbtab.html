@@ -37,16 +37,8 @@ header{
 
 header img{
   width:170px;
-  animation: floatY 4.5s ease-in-out infinite,
-             softGlow 4s ease-in-out infinite;
+  animation: softGlow 2s ease-in-out infinite;
 }
-/* Vertical gentle movement */
-@keyframes floatY {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-6px); }
-  100% { transform: translateY(0); }
-}
-
 /* Light glow fade in & out */
 @keyframes softGlow {
   0% {
@@ -277,6 +269,7 @@ document.addEventListener("click",e=>{
 
 </body>
 </html>
+
 
 
 
