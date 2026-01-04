@@ -2,262 +2,196 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Webb Tab | GoGenix Webb</title>
+<title>WebbTab</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI",sans-serif;
+}
 
 body{
-  font-family:"Segoe UI",sans-serif;
-  background:linear-gradient(135deg,#020617,#0f172a);
-  color:#e5e7eb;
   min-height:100vh;
-  overflow-x:hidden;
+  background:linear-gradient(135deg,#0a0f2c,#120b1f);
+  color:#fff;
 }
 
-/* ===== APPEAR ANIMATION ===== */
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(14px)}
-  to{opacity:1;transform:translateY(0)}
+/* ---------- HEADER ---------- */
+.header{
+  padding:25px;
+  text-align:center;
 }
-.appear{animation:fadeUp .75s ease forwards;opacity:0}
-.delay-1{animation-delay:.1s}
-.delay-2{animation-delay:.25s}
-.delay-3{animation-delay:.4s}
-.delay-4{animation-delay:.55s}
-.delay-5{animation-delay:.7s}
 
-/* ===== HEADER ===== */
-header{
+.brand{
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  padding:1.3rem 2rem .6rem;
+  justify-content:center;
+  gap:28px;
 }
-header img{height:86px}
 
-/* ===== NAVBAR ===== */
-.neon-navbar{
-  margin:.8rem auto 1.2rem;
-  width:fit-content;
-  padding:.65rem 1.6rem;
-  border-radius:20px;
-  background:rgba(15,23,42,.78);
-  backdrop-filter:blur(14px);
-  border:1px solid rgba(148,163,184,.25);
-  z-index:3000;
+.logo{
+  width:80px;   /* bigger logos */
+  height:auto;
 }
-.nav-links{list-style:none;display:flex;gap:2.2rem}
-.nav-links>li{position:relative}
-.nav-links a{color:#e5e7eb;text-decoration:none;font-weight:600;cursor:pointer}
 
-/* ===== DROPDOWN ===== */
-.dropdown-menu{
-  position:absolute;
-  top:125%;
-  left:0;
-  width:260px;
-  background:rgba(2,6,23,.97);
-  border-radius:16px;
-  border:1px solid rgba(148,163,184,.28);
-  padding:.6rem 0;
-  display:none;
-  max-height:260px;
-  overflow-y:auto;
-  z-index:4000;
-}
-.dropdown.active .dropdown-menu{display:block}
-.dropdown-menu a{
-  display:block;
-  padding:.65rem 1.1rem;
-  color:#cbd5f5;
-}
-.dropdown-menu a:hover{background:rgba(148,163,184,.12)}
-
-/* ===== SEARCH ===== */
-.search-wrap{
+/* ---------- NAVBAR ---------- */
+.navbar{
   display:flex;
   justify-content:center;
-  margin:1rem;
+  margin-top:10px;
   position:relative;
-  z-index:2000;
+  z-index:1000;
 }
-.search-box{
-  width:320px;
-  max-width:90%;
-}
-.search-box input{
-  width:100%;
-  padding:.65rem 1.1rem;
-  border-radius:999px;
-  border:1px solid rgba(148,163,184,.25);
-  background:rgba(30,41,59,.55);
-  backdrop-filter:blur(12px);
-  color:#e5e7eb;
-  outline:none;
-}
-.search-box input::placeholder{color:#94a3b8}
 
-/* suggestions */
-.suggestions{
-  position:absolute;
-  top:115%;
-  width:100%;
-  background:rgba(2,6,23,.98);
-  border-radius:14px;
-  border:1px solid rgba(148,163,184,.25);
-  max-height:240px;
-  overflow-y:auto;
-  display:none;
-  z-index:3000;
+.nav-menu{
+  display:flex;
+  gap:22px;
+  padding:14px 22px;
+  border:1px solid rgba(255,255,255,0.25);
+  border-radius:30px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
 }
-.suggestions div{
-  padding:.65rem 1rem;
+
+.nav-item{
+  position:relative;
+}
+
+.nav-btn{
+  background:transparent;
+  border:none;
+  color:#fff;
+  font-size:15px;
   cursor:pointer;
-  color:#cbd5f5;
-}
-.suggestions div:hover,
-.suggestions .active{
-  background:rgba(148,163,184,.15);
+  padding:10px 16px;
 }
 
-/* ===== TITLE ===== */
-.page-title{
+.nav-btn:hover{
+  color:#b18cff;
+}
+
+/* ---------- DROPDOWN ---------- */
+.dropdown{
+  position:absolute;
+  top:130%;
+  left:50%;
+  transform:translateX(-50%);
+  min-width:210px;
+  background:rgba(18,10,40,0.95);
+  border-radius:14px;
+  padding:10px 0;
+  display:none;
+  z-index:3000; /* never hides */
+  box-shadow:0 12px 30px rgba(0,0,0,0.6);
+}
+
+.dropdown a{
+  display:block;
+  padding:11px 20px;
+  color:#fff;
+  text-decoration:none;
+  font-size:14px;
+}
+
+.dropdown a:hover{
+  background:rgba(255,255,255,0.08);
+}
+
+/* ---------- CONTENT ---------- */
+.content{
   text-align:center;
-  margin:.6rem 1rem 1.6rem;
-  font-size:1.45rem;
-  color:#93c5fd;
+  margin-top:90px;
+  padding:20px;
+  animation:fadeUp 1s ease forwards;
 }
 
-/* ===== ABOUT ===== */
-.about{
-  max-width:900px;
-  margin:auto;
-  padding:2rem;
-  background:rgba(30,41,59,.55);
-  backdrop-filter:blur(14px);
-  border-radius:20px;
-  border:1px solid rgba(148,163,184,.2);
-  line-height:1.75;
-}
-
-/* ===== FOOTER ===== */
-footer{
-  text-align:center;
-  padding:1.6rem;
-  margin-top:2rem;
-  color:#94a3b8;
-  font-size:.85rem;
-}
-
-/* responsive */
-@media(max-width:768px){
-  header img{height:74px}
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(25px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
 }
 </style>
 </head>
 
 <body>
 
-<header class="appear delay-1">
-  <img src="WEBB-removebg-preview.png">
-  <img src="UNITED_PLATFORM-removebg-preview.png">
+<!-- HEADER -->
+<header class="header">
+  <div class="brand">
+    <img src="logo1.png" class="logo">
+    <h1>Welcome to WebbTab</h1>
+    <img src="logo2.png" class="logo">
+  </div>
 </header>
 
-<nav class="neon-navbar appear delay-2">
-<ul class="nav-links">
-  <li class="dropdown"><a onclick="toggleDropdown(event)">Commons ▾</a>
-    <ul class="dropdown-menu">
-      <li><a href="whiteboard.html">Whiteboard</a></li>
-      <li><a href="indexrb.html">Resume Builder</a></li>
-      <li><a href="chart.html">Chart Maker</a></li>
-      <li><a href="filo.html">File Converter</a></li>
-      <li><a href="qr.html">QR Generator</a></li>
-      <li><a href="invoice.html">Invoice Generator</a></li>
-      <li><a href="speed.html">NetoMeter</a></li>
-    </ul>
-  </li>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <ul class="nav-menu">
 
-  <li class="dropdown"><a onclick="toggleDropdown(event)">Programming ▾</a>
-    <ul class="dropdown-menu">
-      <li><a href="codex.html">HTML / CSS</a></li>
-      <li><a href="fronto.html">HTML / CSS / JS</a></li>
-    </ul>
-  </li>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="toggleDropdown('dev')">Developer Tools</button>
+      <div class="dropdown" id="dev">
+        <a href="#">HTML Editor</a>
+        <a href="#">CSS Playground</a>
+        <a href="#">JavaScript Compiler</a>
+      </div>
+    </li>
 
-  <li class="dropdown"><a onclick="toggleDropdown(event)">Specials ▾</a>
-    <ul class="dropdown-menu">
-      <li><a href="unigallery.html">Art Gallery</a></li>
-    </ul>
-  </li>
-</ul>
+    <li class="nav-item">
+      <button class="nav-btn" onclick="toggleDropdown('ai')">AI Tools</button>
+      <div class="dropdown" id="ai">
+        <a href="#">Resume Analyzer</a>
+        <a href="#">AI Code Review</a>
+        <a href="#">Smart Notes</a>
+      </div>
+    </li>
+
+    <li class="nav-item">
+      <button class="nav-btn" onclick="toggleDropdown('edu')">Education</button>
+      <div class="dropdown" id="edu">
+        <a href="#">DBMS</a>
+        <a href="#">DAA</a>
+        <a href="#">Operating Systems</a>
+      </div>
+    </li>
+
+  </ul>
 </nav>
 
-<!-- SEARCH -->
-<div class="search-wrap appear delay-3">
-  <div class="search-box">
-    <input id="searchInput" placeholder="Search Webb">
-    <div id="suggestions" class="suggestions"></div>
-  </div>
-</div>
-
-<h1 class="page-title appear delay-4">Welcome to Webb Tab</h1>
-
-<section class="about appear delay-5">
-Webb Tab is a unified digital utility platform delivering productivity, creativity, and development tools within one disciplined workspace. It centralizes essential utilities such as Whiteboard, Resume Builder, Chart Maker, File Converter, QR Generator, Invoice Generator, NetoMeter, programming environments, and creative galleries, ensuring reliability, clarity, and long term usability for students, professionals, and creators.
-</section>
-
-<footer class="appear delay-5">
-© One Tab. Complete Utility.
-</footer>
+<!-- CONTENT -->
+<main class="content">
+  <h2>Unified Platform for Internet Utilities</h2>
+  <p>Simple. Powerful. Discipline-driven.</p>
+</main>
 
 <script>
-/* ===== DROPDOWN ===== */
-function toggleDropdown(e){
-  e.stopPropagation();
-  const p=e.target.closest(".dropdown");
-  document.querySelectorAll(".dropdown").forEach(d=>{
-    if(d!==p)d.classList.remove("active");
+function toggleDropdown(id){
+  const all=document.querySelectorAll('.dropdown');
+  all.forEach(d=>{
+    if(d.id!==id) d.style.display='none';
   });
-  p.classList.toggle("active");
+
+  const current=document.getElementById(id);
+  current.style.display=
+    current.style.display==='block'?'none':'block';
 }
-document.addEventListener("click",()=>{
-  document.querySelectorAll(".dropdown").forEach(d=>d.classList.remove("active"));
-});
 
-/* ===== SEARCH DATA ===== */
-const tools=[
- {name:"Whiteboard",link:"whiteboard.html"},
- {name:"Resume Builder",link:"indexrb.html"},
- {name:"Chart Maker",link:"chart.html"},
- {name:"File Converter",link:"filo.html"},
- {name:"QR Generator",link:"qr.html"},
- {name:"Invoice Generator",link:"invoice.html"},
- {name:"NetoMeter",link:"speed.html"},
- {name:"HTML / CSS",link:"codex.html"},
- {name:"HTML / CSS / JS",link:"fronto.html"},
- {name:"Art Gallery",link:"unigallery.html"}
-];
-
-const input=document.getElementById("searchInput");
-const box=document.getElementById("suggestions");
-
-input.addEventListener("input",()=>{
-  const val=input.value.toLowerCase();
-  box.innerHTML="";
-  if(!val){box.style.display="none";return;}
-  tools.filter(t=>t.name.toLowerCase().includes(val))
-    .forEach(t=>{
-      const d=document.createElement("div");
-      d.textContent=t.name;
-      d.onclick=()=>window.location.href=t.link;
-      box.appendChild(d);
+/* close dropdown on outside click */
+document.addEventListener('click',function(e){
+  if(!e.target.classList.contains('nav-btn')){
+    document.querySelectorAll('.dropdown').forEach(d=>{
+      d.style.display='none';
     });
-  box.style.display=box.children.length?"block":"none";
+  }
 });
 </script>
 
 </body>
 </html>
-
