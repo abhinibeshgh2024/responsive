@@ -1,45 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>GoGenix Art Gallery</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>GoGenix Art Gallery</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
 
-    <link rel="stylesheet" href="unigallery.css">
+body{
+  background:linear-gradient(135deg,#0b102a,#14091f);
+  color:#fff;
+  min-height:100vh;
+  animation:bodyFade 1.2s ease forwards;
+}
 
-    <!-- jsPDF for PDF download (works on mobile & PC) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+/* BODY FADE */
+@keyframes bodyFade{from{opacity:0} to{opacity:1}}
+
+/* HEADER */
+header.main-header{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:20px;
+  background:transparent;
+  z-index:1000;
+}
+
+header.main-header h1{
+  font-size:28px;
+  color:#93c5fd;
+  margin-bottom:12px;
+}
+
+/* NAVBAR */
+.navbar{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-bottom:20px;
+}
+
+.navbar button{
+  padding:8px 14px;
+  border:none;
+  border-radius:12px;
+  background:rgba(255,255,255,0.06);
+  color:#fff;
+  cursor:pointer;
+  transition:0.3s ease;
+  backdrop-filter:blur(12px);
+}
+
+.navbar button:hover{
+  background:rgba(139,92,246,0.4);
+  color:#fff;
+}
+
+/* SECTION */
+.section{
+  max-width:1000px;
+  margin:0 auto 50px;
+  padding:20px;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,0.18);
+  border-radius:22px;
+}
+
+.section h2{
+  text-align:center;
+  margin-bottom:20px;
+  color:#93c5fd;
+  font-size:24px;
+}
+
+/* GALLERY GRID */
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
+}
+
+.gallery img{
+  width:100%;
+  border-radius:14px;
+  cursor:pointer;
+  transition:transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery img:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 18px rgba(139,92,246,0.45);
+}
+
+/* MODAL */
+.modal{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.85);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  z-index:2000;
+  animation:modalFade 0.3s ease forwards;
+}
+
+@keyframes modalFade{from{opacity:0} to{opacity:1}}
+
+.modal img{
+  max-width:90%;
+  max-height:70%;
+  border-radius:16px;
+  margin-bottom:20px;
+  border:1px solid rgba(255,255,255,0.2);
+}
+
+.modal .modal-actions{
+  display:flex;
+  gap:15px;
+}
+
+.modal .modal-actions button{
+  padding:10px 18px;
+  border:none;
+  border-radius:12px;
+  background:rgba(255,255,255,0.06);
+  color:#fff;
+  cursor:pointer;
+  transition:0.3s ease;
+  backdrop-filter:blur(12px);
+}
+
+.modal .modal-actions button:hover{
+  background:rgba(139,92,246,0.4);
+}
+
+.modal .close{
+  position:absolute;
+  top:20px;
+  right:30px;
+  font-size:28px;
+  cursor:pointer;
+  color:#fff;
+  transition:color 0.3s;
+}
+
+.modal .close:hover{color:#c9a4ff;}
+
+/* DOWNLOAD OPTIONS ANIMATION */
+@keyframes slideIn{from{transform:translateY(-20px);opacity:0} to{transform:translateY(0);opacity:1}}
+</style>
 </head>
 <body>
 
 <header class="main-header">
-    <h1>GoGenix Art Gallery</h1>
-
-    <nav class="navbar">
-        <button onclick="loadGallery('devotion')">Devotion</button>
-        <button onclick="loadGallery('nature')">Nature</button>
-        <button onclick="loadGallery('environment')">Environment</button>
-        <button onclick="loadGallery('monuments')">Monuments</button>
-    </nav>
+  <h1>GoGenix Art Gallery</h1>
+  <nav class="navbar">
+    <button onclick="loadGallery('devotion')">Devotion</button>
+    <button onclick="loadGallery('nature')">Nature</button>
+    <button onclick="loadGallery('environment')">Environment</button>
+    <button onclick="loadGallery('monuments')">Monuments</button>
+  </nav>
 </header>
 
 <section class="section">
-    <h2 id="sectionTitle">Devotion</h2>
-    <div class="gallery" id="gallery"></div>
+  <h2 id="sectionTitle">Devotion</h2>
+  <div class="gallery" id="gallery"></div>
 </section>
 
 <!-- VIEW / DOWNLOAD MODAL -->
 <div class="modal" id="imageModal">
-    <span class="close" onclick="closeModal()">✕</span>
-    <img id="modalImg">
-
-    <div class="modal-actions">
-        <button onclick="downloadImage('png')">PNG</button>
-        <button onclick="downloadImage('jpg')">JPG</button>
-        <button onclick="downloadImage('pdf')">PDF</button>
-    </div>
+  <span class="close" onclick="closeModal()">✕</span>
+  <img id="modalImg">
+  <div class="modal-actions" id="downloadOptions">
+    <button onclick="downloadImage('png')">PNG</button>
+    <button onclick="downloadImage('jpg')">JPG</button>
+    <button onclick="downloadImage('pdf')">PDF</button>
+  </div>
 </div>
 
-<script src="unigallery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const galleryData = {
+  devotion:[
+    'images/devotion1.jpg',
+    'images/devotion2.jpg',
+    'images/devotion3.jpg'
+  ],
+  nature:[
+    'images/nature1.jpg',
+    'images/nature2.jpg',
+    'images/nature3.jpg'
+  ],
+  environment:[
+    'images/environment1.jpg',
+    'images/environment2.jpg',
+    'images/environment3.jpg'
+  ],
+  monuments:[
+    'images/monuments1.jpg',
+    'images/monuments2.jpg',
+    'images/monuments3.jpg'
+  ]
+};
+
+const gallery = document.getElementById('gallery');
+const modal = document.getElementById('imageModal');
+const modalImg = document.getElementById('modalImg');
+let currentSrc = '';
+
+function loadGallery(category){
+  gallery.innerHTML = '';
+  document.getElementById('sectionTitle').innerText = category.charAt(0).toUpperCase() + category.slice(1);
+  galleryData[category].forEach(src=>{
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = category;
+    img.onclick = ()=>openModal(src);
+    gallery.appendChild(img);
+  });
+}
+
+function openModal(src){
+  currentSrc = src;
+  modal.style.display = 'flex';
+  modalImg.src = src;
+}
+
+function closeModal(){
+  modal.style.display = 'none';
+  modalImg.src = '';
+}
+
+function downloadImage(type){
+  if(!currentSrc) return;
+  if(type==='pdf'){
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const img = new Image();
+    img.src = currentSrc;
+    img.onload = ()=>{
+      const ratio = img.width/img.height;
+      const width = doc.internal.pageSize.getWidth();
+      const height = width/ratio;
+      doc.addImage(img, 'JPEG', 0, 10, width, height);
+      doc.save('image.pdf');
+    };
+  } else {
+    const link = document.createElement('a');
+    link.href = currentSrc;
+    link.download = 'image.' + type;
+    link.click();
+  }
+}
+
+// Load default gallery
+loadGallery('devotion');
+</script>
+
 </body>
 </html>
