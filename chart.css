@@ -27,6 +27,7 @@ body {
   margin: 20px;
   padding: 24px;
   background: transparent;
+  border:none;
 }
 
 .header img {
