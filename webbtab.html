@@ -3,168 +3,176 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WEBB TAB</title>
+<title>Webb Tab | GoGenix Webb</title>
 
 <style>
-/* RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Segoe UI", sans-serif;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-/* BODY */
-body {
-    background: linear-gradient(180deg, #0a0f1f, #02040a);
-    color: #ffffff;
-    min-height: 100vh;
+body{
+  font-family:"Segoe UI",sans-serif;
+  background:linear-gradient(135deg,#020617,#0f172a);
+  color:#e5e7eb;
+  min-height:100vh;
+  overflow-x:hidden;
 }
 
-/* HEADER / NAVBAR */
-header {
-    position: sticky;
-    top: 0;
-    z-index: 9999;
-    background: rgba(0,0,0,0.35);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+/* ===== HEADER ===== */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:1.2rem 2rem 0.6rem;
+  background:transparent;
 }
 
-.navbar {
-    max-width: 1300px;
-    margin: auto;
-    padding: 14px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+header img{
+  height:72px;
+  width:auto;
 }
 
-/* LOGOS */
-.logo-group {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+/* ===== NAVBAR ===== */
+.neon-navbar{
+  position:relative;
+  margin:0.8rem auto 0.6rem;
+  width:fit-content;
+  padding:0.65rem 1.6rem;
+  border-radius:20px;
+  background:rgba(15,23,42,0.78);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(148,163,184,0.25);
+  z-index:2000;
 }
 
-.logo-group img {
-    height: 42px;
-    width: auto;
+.nav-links{
+  list-style:none;
+  display:flex;
+  gap:2.2rem;
 }
 
-/* NAV LINKS */
-.nav-links {
-    display: flex;
-    gap: 28px;
+.nav-links>li{
+  position:relative;
 }
 
-.nav-item {
-    position: relative;
+.nav-links a{
+  text-decoration:none;
+  color:#e5e7eb;
+  font-weight:600;
+  cursor:pointer;
+  white-space:nowrap;
 }
 
-.nav-item button {
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: 15px;
-    cursor: pointer;
-    padding: 6px 0;
+/* ===== DROPDOWN ===== */
+.dropdown-menu{
+  position:absolute;
+  top:125%;
+  left:0;
+  width:260px;
+  background:rgba(2,6,23,0.97);
+  backdrop-filter:blur(16px);
+  border-radius:16px;
+  border:1px solid rgba(148,163,184,0.28);
+  box-shadow:0 25px 60px rgba(0,0,0,0.65);
+  padding:0.6rem 0;
+  display:none;
+  max-height:260px;
+  overflow-y:auto;
 }
 
-/* DROPDOWN */
-.dropdown {
-    position: absolute;
-    top: 130%;
-    left: 0;
-    width: 240px;
-    background: #0e142b;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-    display: none;
-    flex-direction: column;
-    max-height: 260px;
-    overflow-y: auto;
-    z-index: 10000;
+.dropdown.active .dropdown-menu{
+  display:block;
 }
 
-/* SCROLLBAR */
-.dropdown::-webkit-scrollbar {
-    width: 6px;
-}
-.dropdown::-webkit-scrollbar-thumb {
-    background: #3c4cff;
-    border-radius: 10px;
+.dropdown-menu li{
+  list-style:none;
 }
 
-.dropdown a {
-    padding: 12px 14px;
-    text-decoration: none;
-    color: #dcdcff;
-    font-size: 14px;
-}
-.dropdown a:hover {
-    background: rgba(60,76,255,0.15);
+.dropdown-menu a{
+  display:block;
+  padding:0.65rem 1.1rem;
+  font-size:0.95rem;
+  color:#cbd5f5;
 }
 
-/* ACTIVE */
-.nav-item.active .dropdown {
-    display: flex;
+.dropdown-menu a:hover{
+  background:rgba(148,163,184,0.12);
 }
 
-/* SEARCH BAR */
-.search-container {
-    margin: 26px auto 10px;
-    max-width: 720px;
-    padding: 0 20px;
+/* scrollbar */
+.dropdown-menu::-webkit-scrollbar{
+  width:6px;
+}
+.dropdown-menu::-webkit-scrollbar-thumb{
+  background:rgba(148,163,184,0.45);
+  border-radius:10px;
+}
+.dropdown-menu{
+  scrollbar-width:thin;
+  scrollbar-color:rgba(148,163,184,0.5) transparent;
 }
 
-.search-bar {
-    width: 100%;
-    padding: 16px 22px;
-    border-radius: 40px;
-    border: none;
-    outline: none;
-    font-size: 15px;
-    background: rgba(255,255,255,0.08);
-    color: #ffffff;
-    backdrop-filter: blur(8px);
+/* ===== SEARCH BAR ===== */
+.search-wrap{
+  display:flex;
+  justify-content:center;
+  margin:0.9rem 1rem 1.4rem;
 }
 
-.search-bar::placeholder {
-    color: #b9c0ff;
+.search-wrap input{
+  width:320px;
+  max-width:90%;
+  padding:0.65rem 1.1rem;
+  border-radius:999px;
+  border:1px solid rgba(148,163,184,0.25);
+  background:rgba(30,41,59,0.55);
+  backdrop-filter:blur(12px);
+  color:#e5e7eb;
+  outline:none;
+  font-size:0.95rem;
 }
 
-/* HERO */
-.hero {
-    text-align: center;
-    padding: 50px 20px 30px;
+.search-wrap input::placeholder{
+  color:#94a3b8;
 }
 
-.hero h1 {
-    font-size: 26px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    color: #e7ebff;
+/* ===== TITLE ===== */
+.page-title{
+  text-align:center;
+  margin:0.6rem 1rem 1.6rem;
+  font-size:1.45rem;
+  letter-spacing:0.8px;
+  color:#93c5fd;
 }
 
-/* ABOUT */
-.about {
-    max-width: 1100px;
-    margin: 60px auto;
-    padding: 0 20px;
-    line-height: 1.8;
-    font-size: 15px;
-    color: #d6dbff;
+/* ===== ABOUT ===== */
+.about{
+  max-width:900px;
+  margin:auto;
+  padding:2rem;
+  background:rgba(30,41,59,0.55);
+  backdrop-filter:blur(14px);
+  border-radius:20px;
+  border:1px solid rgba(148,163,184,0.2);
+  line-height:1.75;
+  font-size:0.96rem;
 }
 
-/* FOOTER */
-footer {
-    text-align: center;
-    padding: 30px 20px;
-    border-top: 1px solid rgba(255,255,255,0.08);
-    font-size: 13px;
-    color: #aab0ff;
+/* ===== FOOTER ===== */
+footer{
+  text-align:center;
+  padding:1.6rem;
+  margin-top:2rem;
+  color:#94a3b8;
+  font-size:0.85rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  header img{height:64px;}
+  .nav-links{gap:1.6rem;}
 }
 </style>
 </head>
@@ -172,84 +180,80 @@ footer {
 <body>
 
 <header>
-    <div class="navbar">
-
-        <div class="logo-group">
-            <img src="https://via.placeholder.com/120x40?text=Logo+1">
-            <img src="https://via.placeholder.com/120x40?text=Logo+2">
-        </div>
-
-        <nav class="nav-links">
-
-            <div class="nav-item">
-                <button onclick="toggleDropdown(this)">Tools</button>
-                <div class="dropdown">
-                    <a href="#">Speed Monitor</a>
-                    <a href="#">Security Scanner</a>
-                    <a href="#">AI Analyzer</a>
-                    <a href="#">Traffic Insights</a>
-                    <a href="#">Performance Logs</a>
-                    <a href="#">System Health</a>
-                </div>
-            </div>
-
-            <div class="nav-item">
-                <button onclick="toggleDropdown(this)">Special</button>
-                <div class="dropdown">
-                    <a href="#">Enterprise Dashboard</a>
-                    <a href="#">Advanced Metrics</a>
-                    <a href="#">Developer Console</a>
-                    <a href="#">Automation Engine</a>
-                    <a href="#">Data Vault</a>
-                    <a href="#">Custom Integrations</a>
-                </div>
-            </div>
-
-            <div class="nav-item">
-                <button onclick="toggleDropdown(this)">Support</button>
-                <div class="dropdown">
-                    <a href="#">Documentation</a>
-                    <a href="#">FAQs</a>
-                    <a href="#">Release Notes</a>
-                    <a href="#">Community</a>
-                </div>
-            </div>
-
-        </nav>
-    </div>
+  <img src="WEBB-removebg-preview.png" alt="Webb Logo">
+  <img src="UNITED_PLATFORM-removebg-preview.png" alt="United Platform">
 </header>
 
-<div class="search-container">
-    <input class="search-bar" type="text" placeholder="Search Webb">
+<nav class="neon-navbar">
+  <ul class="nav-links">
+
+    <li class="dropdown">
+      <a onclick="toggleDropdown(event)">Commons ▾</a>
+      <ul class="dropdown-menu">
+        <li><a href="whiteboard.html">Whiteboard</a></li>
+        <li><a href="indexrb.html">Resume Builder</a></li>
+        <li><a href="chart.html">Chart Maker</a></li>
+        <li><a href="filo.html">File Converter</a></li>
+        <li><a href="qr.html">QR Generator</a></li>
+        <li><a href="invoice.html">Invoice Generator</a></li>
+        <li><a href="speed.html">NetoMeter</a></li>
+      </ul>
+    </li>
+
+    <li class="dropdown">
+      <a onclick="toggleDropdown(event)">Programming ▾</a>
+      <ul class="dropdown-menu">
+        <li><a href="codex.html">HTML / CSS</a></li>
+        <li><a href="fronto.html">HTML / CSS / JS</a></li>
+        <li><a href="#">UI / UX (Coming Soon)</a></li>
+        <li><a href="#">AI Solutions (Coming Soon)</a></li>
+      </ul>
+    </li>
+
+    <li class="dropdown">
+      <a onclick="toggleDropdown(event)">Specials ▾</a>
+      <ul class="dropdown-menu">
+        <li><a href="unigallery.html">Art Gallery</a></li>
+      </ul>
+    </li>
+
+  </ul>
+</nav>
+
+<div class="search-wrap">
+  <input type="text" placeholder="Search Webb">
 </div>
 
-<section class="hero">
-    <h1>Welcome to Webb Tab</h1>
-</section>
+<h1 class="page-title">Welcome to Webb Tab</h1>
 
 <section class="about">
-    Webb Tab is engineered as a unified, enterprise-ready digital platform designed to deliver precision monitoring, performance intelligence, and operational clarity within a single, secure interface. Built with a product-launch mindset and an evergreen architectural vision, Webb Tab integrates advanced tools that empower users to observe system behavior, analyze real-time metrics, and make informed decisions with confidence. The Tools section provides direct access to speed monitoring, security scanning, AI-driven analysis, traffic intelligence, performance logging, and overall system health visualization, ensuring complete operational awareness. The Special suite introduces enterprise-grade capabilities including advanced dashboards, automation engines, developer-focused consoles, secure data vaults, and customizable integrations, tailored for scalable and future-ready deployments. The Support area complements the ecosystem with structured documentation, frequently asked references, transparent release updates, and a collaborative community channel. Every component of Webb Tab is designed with consistency, reliability, and long-term usability in mind, making it a dependable platform for continuous growth, innovation, and professional digital operations.
+Webb Tab is a unified digital utility platform designed to deliver essential productivity, creativity, and development tools within a single structured environment. It eliminates the need to navigate across multiple fragmented services by offering a centralized workspace focused on reliability, clarity, and ease of use.  
+
+The Commons section includes tools such as a digital Whiteboard for visual ideation, a Resume Builder for professional document creation, a Chart Maker for accurate data visualization, a File Converter for everyday format handling, a QR Generator for quick scannable content creation, an Invoice Generator for structured billing, and NetoMeter for real time internet speed analysis.  
+
+The Programming section supports structured learning and hands on practice through focused HTML and CSS utilities, extended front end development environments, and future ready modules for UI design and AI powered solutions.  
+
+Specialized creative utilities such as the Art Gallery are hosted under the Specials section, offering a dedicated space for visual exploration.  
+
+Webb Tab is engineered with scalability, usability, and long term relevance in mind, making it suitable for students, professionals, and creators seeking a disciplined and dependable digital workspace.
 </section>
 
 <footer>
-    © 2026 WEBB TAB • All Rights Reserved
+© One Tab. Complete Utility.
 </footer>
 
 <script>
-function toggleDropdown(btn) {
-    document.querySelectorAll('.nav-item').forEach(item => {
-        if (item.contains(btn)) {
-            item.classList.toggle('active');
-        } else {
-            item.classList.remove('active');
-        }
-    });
+function toggleDropdown(e){
+  e.stopPropagation();
+  const parent=e.target.closest(".dropdown");
+  document.querySelectorAll(".dropdown").forEach(d=>{
+    if(d!==parent)d.classList.remove("active");
+  });
+  parent.classList.toggle("active");
 }
 
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.nav-item')) {
-        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-    }
+document.addEventListener("click",()=>{
+  document.querySelectorAll(".dropdown").forEach(d=>d.classList.remove("active"));
 });
 </script>
 
