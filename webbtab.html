@@ -37,19 +37,18 @@ header{
 
 header img{
   width:170px;
-  animation: softGlow 3.5s ease-in-out infinite;
+  animation: logoAppear 1.2s ease forwards;
 }
-@keyframes softGlow {
+@keyframes logoAppear {
   0% {
-    filter: drop-shadow(0 0 0px rgba(168,85,247,0.2));
-  }
-  50% {
-    filter: drop-shadow(0 0 14px rgba(168,85,247,0.55));
+    opacity: 0;
+    transform: scale(0.92);
   }
   100% {
-    filter: drop-shadow(0 0 0px rgba(168,85,247,0.2));
+    opacity: 1;
+    transform: scale(1);
   }
-/* ================= NAVBAR ================= */
+  /* ================= NAVBAR ================= */
 .navbar{
   display:flex;
   justify-content:center;
@@ -267,6 +266,7 @@ document.addEventListener("click",e=>{
 
 </body>
 </html>
+
 
 
 
