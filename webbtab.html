@@ -37,12 +37,27 @@ header{
 
 header img{
   width:170px;
-  animation: breathe 5s ease-in-out infinite;
+  animation: floatY 4.5s ease-in-out infinite,
+             softGlow 4s ease-in-out infinite;
 }
-@keyframes breathe {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.035); }
-  100% { transform: scale(1); }
+/* Vertical gentle movement */
+@keyframes floatY {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+/* Light glow fade in & out */
+@keyframes softGlow {
+  0% {
+    filter: drop-shadow(0 0 0px rgba(139,92,246,0.15));
+  }
+  50% {
+    filter: drop-shadow(0 0 16px rgba(139,92,246,0.55));
+  }
+  100% {
+    filter: drop-shadow(0 0 0px rgba(139,92,246,0.15));
+  }
 }
   /* ================= NAVBAR ================= */
 .navbar{
@@ -262,6 +277,7 @@ document.addEventListener("click",e=>{
 
 </body>
 </html>
+
 
 
 
