@@ -36,14 +36,15 @@ header{
 }
 
 header img{
-  width:170px;
+  width:200px;
 }
-  /* ================= NAVBAR ================= */
+
+/* ================= NAVBAR ================= */
 .navbar{
   display:flex;
   justify-content:center;
   margin-top:10px;
-  z-index:9999;             /* IMPORTANT FIX */
+  z-index:9999;
   position:relative;
   animation:navSlide 1s ease forwards;
 }
@@ -55,6 +56,7 @@ header img{
 
 .navbar ul{
   display:flex;
+  flex-wrap: wrap;
   gap:22px;
   padding:14px 26px;
   border-radius:30px;
@@ -90,7 +92,8 @@ header img{
   top:135%;
   left:50%;
   transform:translateX(-50%) scale(.95);
-  width:240px;
+  min-width:180px;
+  max-width:90vw;
   background:rgba(15,8,40,0.96);
   border-radius:14px;
   padding:8px 0;
@@ -98,7 +101,7 @@ header img{
   max-height:260px;
   overflow-y:auto;
   box-shadow:0 18px 40px rgba(0,0,0,.65);
-  z-index:10000;            /* IMPORTANT FIX */
+  z-index:10000;
   animation:dropFade .35s ease forwards;
 }
 
@@ -132,7 +135,7 @@ header img{
 .page-title{
   text-align:center;
   margin:90px 20px 30px;
-  font-size:26px;
+  font-size:22px;
   letter-spacing:.5px;
   z-index:1;
   position:relative;
@@ -165,7 +168,7 @@ header img{
 footer{
   text-align:center;
   padding:22px;
-  opacity:.8;
+  opacity:.85;
   animation:fadeSoft 1.5s ease forwards;
 }
 
@@ -173,7 +176,9 @@ footer{
   from{opacity:0}
   to{opacity:.85}
 }
-  .logo-animated {
+
+/* logo animation */
+.logo-animated {
   animation: floatY 4.5s ease-in-out infinite,
              softGlow 4s ease-in-out infinite;
 }
@@ -187,17 +192,21 @@ footer{
 
 /* Light glow fade in & out */
 @keyframes softGlow {
-  0% {
-    filter: drop-shadow(0 0 0px rgba(139,92,246,0.15));
-  }
-  50% {
-    filter: drop-shadow(0 0 16px rgba(139,92,246,0.55));
-  }
-  100% {
-    filter: drop-shadow(0 0 0px rgba(139,92,246,0.15));
-  }
+  0% { filter: drop-shadow(0 0 0px rgba(139,92,246,0.15)); }
+  50% { filter: drop-shadow(0 0 16px rgba(139,92,246,0.55)); }
+  100% { filter: drop-shadow(0 0 0px rgba(139,92,246,0.15)); }
 }
 
+/* ================= RESPONSIVE ================= */
+@media(max-width:768px){
+  header img{width:150px;}
+  .navbar ul{flex-direction:column; padding:12px; gap:12px;}
+  .dropdown{
+    left:0 !important;
+    transform:translateX(0);
+    max-width:95vw;
+  }
+}
 </style>
 </head>
 
@@ -210,7 +219,6 @@ footer{
 
 <nav class="navbar">
   <ul>
-
     <li class="nav-item">
       <button class="nav-btn" onclick="toggle('commons')">Commons ▾</button>
       <div class="dropdown" id="commons">
@@ -240,7 +248,6 @@ footer{
         <a href="unigallery.html">Art Gallery</a>
       </div>
     </li>
-
   </ul>
 </nav>
 
@@ -271,6 +278,7 @@ function toggle(id){
   el.style.display = el.style.display==="block" ? "none" : "block";
 }
 
+// Close dropdown when clicking outside
 document.addEventListener("click",e=>{
   if(!e.target.classList.contains("nav-btn")){
     document.querySelectorAll(".dropdown")
@@ -281,14 +289,3 @@ document.addEventListener("click",e=>{
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
