@@ -231,11 +231,10 @@ header h1{
     <h2>Gallery Menu</h2>
     <span class="close-btn" onclick="closeMenu()">×</span>
   </div>
-  <input type="text" id="searchBox" placeholder="Search image..." onkeyup="searchImages()">
   <button onclick="loadGallery('devotion')">Devotion</button>
   <button onclick="loadGallery('nature')">Nature</button>
   <button onclick="loadGallery('environment')">Environment</button>
-  <button onclick="loadGallery('monuments')">Monuments</button>
+  <button onclick="loadGallery('monuments')">Nations</button>
 </div>
 
 <section class="section">
@@ -261,7 +260,7 @@ const data={
   devotion:['angkorwat_artgallery_ggwebb.png','chinesetemple_ggwebb_artgallery.png'],
   nature:['https://picsum.photos/id/1021/500/350','https://picsum.photos/id/1022/500/350'],
   environment:['https://picsum.photos/id/1031/500/350','https://picsum.photos/id/1032/500/350'],
-  monuments:['https://picsum.photos/id/1041/500/350','https://picsum.photos/id/1042/500/350']
+  nations:['https://picsum.photos/id/1041/500/350','https://picsum.photos/id/1042/500/350']
 };
 
 let current=[],currentImg="";
