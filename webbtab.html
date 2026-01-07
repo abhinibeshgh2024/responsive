@@ -436,28 +436,67 @@ footer{
 
 }
 
-/* Container ko grid banaya */
-.count-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Ye ek row mein 2 columns banayega */
-    gap: 15px; /* Boxes ke beech ka gap */
-    margin-top: 20px;
-}
+/* Analytics Container */
+  .analytics-box {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
 
-.count-box {
-    background: rgba(0, 0, 0, 0.35);
-    padding: 20px;
+  /* 2-Column Grid Layout */
+  .count-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Ek row mein do columns */
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  /* Individual Box Styling */
+  .count-box {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 25px 15px;
     border-radius: 16px;
     text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
 
-/* Mobile par ek ke niche ek dikhane ke liye (Optional but recommended) */
-@media (max-width: 480px) {
+  .count-box:hover {
+    transform: translateY(-5px);
+    background: rgba(139, 92, 246, 0.15); /* Light Purple Glow on hover */
+    border-color: rgba(139, 92, 246, 0.4);
+  }
+
+  /* Number on Top */
+  .count-box span {
+    display: block;
+    font-size: 36px; /* Bada number */
+    font-weight: 800;
+    color: #c9a4ff; /* Glow color */
+    line-height: 1;
+    margin-bottom: 8px; /* Gap between number and text */
+  }
+
+  /* Text at Bottom */
+  .count-box small {
+    display: block;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+  }
+
+  /* Mobile Responsive: Ek ke niche ek ho jayega small screens par */
+  @media (max-width: 480px) {
     .count-grid {
-        grid-template-columns: 1fr; 
+      grid-template-columns: 1fr;
     }
-}
+  }
 
 
 
@@ -678,3 +717,4 @@ document.addEventListener("click",e=>{
 </body>
 
 </html>
+
