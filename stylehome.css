@@ -322,6 +322,25 @@ canvas {
     }
 }
 
+.social-links a {
+    display: inline-block; /* Saare icons ek line mein dikhenge */
+    margin-right: 15px;
+    font-size: 20px; /* Icon ka size bada karne ke liye */
+    color: #ccc;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+/* Hover karne par color change hoga */
+.social-links a:hover {
+    color: #00d4ff; 
+    transform: translateY(-5px); /* Icon thoda upar jump karega */
+}
+
+/* Specific colors for icons (Optional) */
+.fa-linkedin:hover { color: #0077b5; }
+.fa-instagram:hover { color: #e4405f; }
+.fa-github:hover { color: #fff; }
 
 
 
