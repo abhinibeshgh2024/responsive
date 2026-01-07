@@ -436,104 +436,27 @@ footer{
 
 }
 
-  /* ===== COUNT BOX ===== */
+/* Container ko grid banaya */
+.count-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Ye ek row mein 2 columns banayega */
+    gap: 15px; /* Boxes ke beech ka gap */
+    margin-top: 20px;
+}
 
 .count-box {
-
     background: rgba(0, 0, 0, 0.35);
-
     padding: 20px;
-
     border-radius: 16px;
-
     text-align: center;
-
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-
-
-.count-box span {
-
-    display: block;
-
-    font-size: 28px;
-
-    font-weight: 700;
-
-    text-align: center;
-
-}
-
-
-
-.count-box small {
-
-    display: block;
-
-    margin-top: 4px;
-
-    font-size: 14px;
-
-    font-weight: 600;
-
-    opacity: 0.85;
-
-    text-align: center;
-
-}
-
-  /* ===== ROOT CONTAINER ===== */
-
-.analytics-box {
-
-    background: rgba(255, 255, 255, 0.08);
-
-    backdrop-filter: blur(15px);
-
-    padding: 28px;
-
-    border-radius: 20px;
-
-    color: #ffffff;
-
-    margin-top: 30px;
-
-    font-family: "Segoe UI", sans-serif;
-
-}
-
-
-
-/* ===== HEADINGS ===== */
-
-.analytics-box h2 {
-
-    text-align: center;
-
-    font-size: 22px;
-
-    font-weight: 700;
-
-    margin-bottom: 20px;
-
-    letter-spacing: 0.5px;
-
-}
-
-
-
-.analytics-box h3 {
-
-    text-align: center;
-
-    font-size: 18px;
-
-    font-weight: 700;
-
-    margin: 20px 0 15px;
-
-    letter-spacing: 0.4px;
-
+/* Mobile par ek ke niche ek dikhane ke liye (Optional but recommended) */
+@media (max-width: 480px) {
+    .count-grid {
+        grid-template-columns: 1fr; 
+    }
 }
 
 
