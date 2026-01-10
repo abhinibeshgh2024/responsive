@@ -1,211 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QXVCXKPVBC"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QXVCXKPVBC"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-QXVCXKPVBC');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>HTML + CSS Editor | WebbTab</title>
+    <link rel="icon" type="image/jpeg" sizes="32x32" href="favicon.png">
 
-  gtag('config', 'G-QXVCXKPVBC');
-</script>
-<meta charset="UTF-8">
-<meta name="robots" content="index, follow">
-<title>HTML + CSS Editor | WebbTab</title>
-  <link rel="icon" type="image/jpeg" sizes="32x32" href="favicon.png">
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:"Segoe UI", sans-serif;
-}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
 
-body{
-  background:linear-gradient(135deg,#0b102a,#14091f);
-  color:#fff;
-  min-height:100vh;
-  animation:bodyFade 1.2s ease forwards;
-}
+        body {
+            background: linear-gradient(135deg, #0b102a, #14091f);
+            color: #fff;
+            min-height: 100vh;
+            animation: bodyFade 1.2s ease forwards;
+            padding-bottom: 40px;
+        }
 
-/* ===== BODY ANIMATION ===== */
-@keyframes bodyFade{
-  from{opacity:0;}
-  to{opacity:1;}
-}
+        /* ===== BODY ANIMATION ===== */
+        @keyframes bodyFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-/* ===== HEADER ===== */
-header{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:24px 20px;
-  background: transparent; /* <-- Transparent header */
-  animation:fadeSoft 1s ease forwards;
-}
+        /* ===== HEADER ===== */
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 20px;
+            background: transparent;
+            animation: fadeSoft 1s ease forwards;
+        }
 
-header img{
-  width:160px;
-  margin-bottom:12px;
-  animation:floatY 4.5s ease-in-out infinite, softGlow 4s ease-in-out infinite;
-}
+        header img {
+            width: 160px;
+            margin-bottom: 12px;
+            animation: floatY 4.5s ease-in-out infinite, softGlow 4s ease-in-out infinite;
+        }
 
-header h2{
-  font-size:20px;
-  color:#93c5fd;
-}
+        header h2 {
+            font-size: 20px;
+            color: #93c5fd;
+        }
 
-/* ===== EDITOR CONTAINER ===== */
-.editor-container{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:20px;
-  margin:20px;
-}
+        /* ===== EDITOR CONTAINER ===== */
+        .editor-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px;
+        }
 
-/* ===== PANELS ===== */
-.editor-panel{
-  flex:1 1 300px;
-  min-width:280px;
-  max-width:450px;
-  height:200px;
-  background: rgba(255,255,255,0.06);
-  backdrop-filter:blur(14px);
-  border:1px solid rgba(255,255,255,0.18);
-  border-radius:20px;
-  padding:16px;
-  display:flex;
-  flex-direction:column;
-  animation:fadeSoft 1.2s ease forwards;
-}
+        /* ===== PANELS ===== */
+        .editor-panel {
+            flex: 1 1 300px;
+            min-width: 280px;
+            max-width: 500px;
+            height: 300px; /* Increased height for better editing */
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            animation: fadeSoft 1.2s ease forwards;
+        }
 
-.editor-panel h3{
-  margin-bottom:8px;
-  color:#93c5fd;
-  text-align:center;
-  font-size:16px;
-}
+        .editor-panel h3 {
+            margin-bottom: 8px;
+            color: #93c5fd;
+            text-align: center;
+            font-size: 16px;
+        }
 
-textarea{
-  flex:1;
-  resize:none;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,0.2);
-  background: rgba(0,0,0,0.25);
-  color:#fff;
-  padding:10px;
-  font-family:monospace;
-  font-size:14px;
-  outline:none;
-  backdrop-filter:blur(6px);
-  transition:all 0.3s ease;
-}
+        textarea {
+            flex: 1;
+            resize: none;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.25);
+            color: #fff;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            outline: none;
+            backdrop-filter: blur(6px);
+            transition: all 0.3s ease;
+        }
 
-textarea:focus{
-  border-color:#8b5cf6;
-  box-shadow:0 0 12px rgba(139,92,246,0.45);
-}
+        textarea:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.45);
+        }
 
-/* ===== OUTPUT ===== */
-.output-panel{
-  background: rgba(255,255,255,0.06);
-  backdrop-filter:blur(14px);
-  border:1px solid rgba(255,255,255,0.18);
-  border-radius:20px;
-  padding:16px;
-  margin-top:20px;
-}
+        /* ===== OUTPUT ===== */
+        .output-container {
+            margin: 20px auto;
+            max-width: 1020px;
+            padding: 0 20px;
+        }
 
-.output-panel h3{
-  text-align:center;
-  color:#93c5fd;
-  font-size:16px;
-  margin-bottom:10px;
-}
+        .output-panel {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            padding: 16px;
+        }
 
-.output-panel iframe{
-  width:100%;
-  height:250px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,0.2);
-  background:#0f172a;
-}
+        .output-panel h3 {
+            text-align: center;
+            color: #93c5fd;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
 
-/* ===== ANIMATIONS ===== */
-@keyframes fadeSoft{
-  from{opacity:0;}
-  to{opacity:1;}
-}
+        .output-panel iframe {
+            width: 100%;
+            height: 350px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: #fdfdfd; /* Light background for output clarity */
+        }
 
-@keyframes floatY{
-  0% {transform: translateY(0);}
-  50%{transform: translateY(-6px);}
-  100%{transform: translateY(0);}
-}
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeSoft {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-@keyframes softGlow{
-  0% {filter:drop-shadow(0 0 0 rgba(139,92,246,0.15));}
-  50% {filter:drop-shadow(0 0 16px rgba(139,92,246,0.55));}
-  100% {filter:drop-shadow(0 0 0 rgba(139,92,246,0.15));}
-}
+        @keyframes floatY {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0); }
+        }
 
-/* ===== RESPONSIVE ===== */
-@media(max-width:768px){
-  .editor-container{
-    flex-direction:column;
-    align-items:center;
-  }
-  .editor-panel{
-    max-width:95%;
-  }
-}
-</style>
+        @keyframes softGlow {
+            0% { filter: drop-shadow(0 0 0 rgba(139, 92, 246, 0.15)); }
+            50% { filter: drop-shadow(0 0 16px rgba(139, 92, 246, 0.55)); }
+            100% { filter: drop-shadow(0 0 0 rgba(139, 92, 246, 0.15)); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media(max-width: 768px) {
+            .editor-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .editor-panel {
+                width: 100%;
+                max-width: 95%;
+            }
+        }
+    </style>
 </head>
 <body>
 
 <header>
-  <img src="WEBB-removebg-preview.png" alt="Webb Logo">
-  <h2>HTML + CSS Editor</h2>
+    <img src="WEBB-removebg-preview.png" alt="Webb Logo">
+    <h2>HTML + CSS Editor</h2>
 </header>
 
 <div class="editor-container">
-  <div class="editor-panel">
-    <h3>HTML</h3>
-    <textarea id="htmlCode" placeholder="Write HTML code here..."></textarea>
-  </div>
-  <div class="editor-panel">
-    <h3>CSS</h3>
-    <textarea id="cssCode" placeholder="Write CSS code here..."></textarea>
-  </div>
+    <div class="editor-panel">
+        <h3>HTML</h3>
+        <textarea id="htmlCode" placeholder="Write HTML code here..."></textarea>
+    </div>
+    <div class="editor-panel">
+        <h3>CSS</h3>
+        <textarea id="cssCode" placeholder="Write CSS code here..."></textarea>
+    </div>
 </div>
 
-<div class="output-panel">
-  <h3>Output</h3>
-  <iframe id="output"></iframe>
+<div class="output-container">
+    <div class="output-panel">
+        <h3>Output Preview</h3>
+        <iframe id="output"></iframe>
+    </div>
 </div>
 
 <script>
-const htmlCode = document.getElementById("htmlCode");
-const cssCode = document.getElementById("cssCode");
-const output = document.getElementById("output");
+    const htmlCode = document.getElementById("htmlCode");
+    const cssCode = document.getElementById("cssCode");
+    const output = document.getElementById("output");
 
-function updateOutput(){
-  const html = htmlCode.value;
-  const css = "<style>" + cssCode.value + "</style>";
-  output.srcdoc = css + html;
-}
+    function updateOutput() {
+        const html = htmlCode.value;
+        const css = "<style>" + cssCode.value + "</style>";
+        // Setting the source of the iframe
+        output.srcdoc = css + html;
+    }
 
-htmlCode.addEventListener("input", updateOutput);
-cssCode.addEventListener("input", updateOutput);
+    htmlCode.addEventListener("input", updateOutput);
+    cssCode.addEventListener("input", updateOutput);
+
+    // Initial call to set up the iframe if there's default text
+    updateOutput();
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
