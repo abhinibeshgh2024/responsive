@@ -38,7 +38,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(11, 15, 26, 0.4);
+            background: transparent;
         }
 
         /* Logo at Center */
@@ -63,7 +63,7 @@
         .live-clock {
             grid-column: 3;
             text-align: right;
-            font-family: 'Courier New', Courier, monospace; /* Digital look */
+            font-family: verdana; /* Digital look */
             color: var(--primary);
             font-weight: 600;
             font-size: 16px;
@@ -182,8 +182,7 @@
 
 <nav>
     <div class="logo-box">
-        <img src="N-removebg-preview.png" alt="Logo">
-        <span>WEBBJAM</span>
+        <img src="N-removebg-preview.png" alt="Logo" style="width:260px; height:160px;>
     </div>
     
     <div class="live-clock" id="clock">00:00:00</div>
