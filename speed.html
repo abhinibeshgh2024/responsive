@@ -1,221 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QXVCXKPVBC"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webb | Pro Speed Test</title>
+    <style>
+        :root {
+            --primary: #38bdf8;
+            --bg: #0f172a;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
 
-  gtag('config', 'G-QXVCXKPVBC');
-</script>
-<meta charset="UTF-8">
-<title>Webb | Net Speed Test</title>
-  <link rel="icon" type="image/jpeg" sizes="32x32" href="favicon.png">
-<meta name="robots" content="index, follow">
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
 
-<style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:"Segoe UI",sans-serif;
-}
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
-body{
-  min-height:100vh;
-  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-  color:#fff;
-  display:flex;
-  flex-direction:column;
-}
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            border: 1px solid var(--border);
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
 
-/* HEADER */
-header{
-  background:transparent;
-  text-align:center;
-  padding:18px;
-}
-header img{
-  width:110px;
-}
-header h1{
-  font-size:26px;
-}
-header p{
-  font-size:14px;
-  opacity:.85;
-}
+        /* HEADER */
+        header h1 { font-size: 24px; letter-spacing: -0.5px; margin-bottom: 5px; }
+        header p { font-size: 13px; color: #94a3b8; margin-bottom: 30px; }
 
-/* MAIN */
-.main{
-  flex:1;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-}
+        /* GAUGE SYSTEM */
+        .gauge-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-/* GLASS */
-.glass{
-  width:100%;
-  max-width:460px;
-  padding:30px;
-  border-radius:22px;
-  background:rgba(255,255,255,0.12);
-  backdrop-filter:blur(14px);
-  box-shadow:0 10px 35px rgba(0,0,0,.35);
-  text-align:center;
-}
+        .gauge-outer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(from -135deg, var(--primary) 0deg, rgba(56, 189, 248, 0.1) 0deg);
+            mask: radial-gradient(transparent 62%, black 63%);
+            -webkit-mask: radial-gradient(transparent 62%, black 63%);
+            transition: background 0.1s ease-out;
+        }
 
-/* SPEED METER */
-.meter{
-  width:240px;
-  height:240px;
-  border-radius:50%;
-  background:
-    conic-gradient(#38bdf8 0deg, rgba(255,255,255,.2) 0deg);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:25px auto;
-  position:relative;
-}
+        .gauge-inner {
+            z-index: 2;
+        }
 
-.meter::after{
-  content:"";
-  width:190px;
-  height:190px;
-  background:rgba(0,0,0,0.55);
-  border-radius:50%;
-  position:absolute;
-}
+        .speed-value { font-size: 56px; font-weight: 800; line-height: 1; }
+        .speed-unit { font-size: 14px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
 
-.center{
-  position:relative;
-  z-index:1;
-}
+        /* STATS GRID */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
 
-.speed{
-  font-size:38px;
-  font-weight:700;
-}
+        .stat-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
 
-.unit{
-  font-size:14px;
-  opacity:.85;
-}
+        .stat-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px; }
+        .stat-value { font-size: 18px; font-weight: 600; }
 
-/* BUTTON */
-button{
-  margin-top:22px;
-  padding:14px 34px;
-  border-radius:14px;
-  border:none;
-  background:#fff;
-  color:#000;
-  font-weight:600;
-  cursor:pointer;
-}
+        /* BUTTON */
+        button {
+            margin-top: 30px;
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            border: none;
+            background: var(--primary);
+            color: #000;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
 
-/* RESULT */
-.result{
-  margin-top:18px;
-  font-size:15px;
-}
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(56, 189, 248, 0.4);
+        }
 
-/* FOOTER */
-.footer{
-  margin-top:18px;
-  font-size:13px;
-  opacity:.8;
-}
-</style>
+        button:active { transform: translateY(0); }
+
+        button:disabled {
+            background: #334155;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+    </style>
 </head>
-
 <body>
 
-<header>
-  <img src="WEBB-removebg-preview.png">
-  <h1>Webb Net Speed Test</h1>
-  <p>Accurate • Clean • Reliable</p>
-</header>
+<div class="container">
+    <header>
+        <h1>Webb Speed</h1>
+        <p>Gigabit Grade Analysis</p>
+    </header>
 
-<div class="main">
-<div class="glass">
-
-  <div class="meter" id="meter">
-    <div class="center">
-      <div class="speed" id="speed">0</div>
-      <div class="unit">Mbps</div>
+    <div class="gauge-container">
+        <div class="gauge-outer" id="gauge"></div>
+        <div class="gauge-inner">
+            <div class="speed-value" id="speed">0</div>
+            <div class="speed-unit">Mbps</div>
+        </div>
     </div>
-  </div>
 
-  <button onclick="startTest()">Start Speed Test</button>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Ping</div>
+            <div class="stat-value"><span id="ping">--</span> <small>ms</small></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Jitter</div>
+            <div class="stat-value"><span id="jitter">--</span> <small>ms</small></div>
+        </div>
+    </div>
 
-  <div class="result" id="result">
-    Click start to measure speed
-  </div>
-
-  <div class="footer">
-    Built with discipline & correctness
-  </div>
-
-</div>
+    <button id="startBtn" onclick="runSpeedTest()">GO</button>
 </div>
 
 <script>
-const meter = document.getElementById("meter");
-const speedEl = document.getElementById("speed");
-const resultEl = document.getElementById("result");
+const gauge = document.getElementById('gauge');
+const speedEl = document.getElementById('speed');
+const pingEl = document.getElementById('ping');
+const jitterEl = document.getElementById('jitter');
+const startBtn = document.getElementById('startBtn');
 
-/* REAL DOWNLOAD TEST */
-async function getRealSpeed(){
-  const url = "https://upload.wikimedia.org/wikipedia/commons/3/3f/Fronalpstock_big.jpg";
-  const start = performance.now();
-  const res = await fetch(url + "?t=" + Math.random());
-  const blob = await res.blob();
-  const end = performance.now();
-
-  const bits = blob.size * 8;
-  const seconds = (end - start) / 1000;
-  return Math.min((bits / seconds / 1024 / 1024).toFixed(2), 200);
+// Smoothly animate values using RequestAnimationFrame
+function animateValue(start, end, duration, element, isGauge = false) {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const current = start + progress * (end - start);
+        
+        if (isGauge) {
+            // Map 0-100 Mbps to 0-270 degrees
+            const degrees = Math.min((current / 100) * 270, 270);
+            gauge.style.background = `conic-gradient(from -135deg, var(--primary) ${degrees}deg, rgba(255,255,255,0.1) ${degrees}deg)`;
+        }
+        
+        element.innerText = current.toFixed(current > 10 ? 1 : 2);
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
+    };
+    window.requestAnimationFrame(step);
 }
 
-/* ANIMATION */
-function animateMeter(target){
-  let current = 0;
-  const maxDeg = 270;
-  const interval = setInterval(()=>{
-    current += target / 40;
-    if(current >= target){
-      current = target;
-      clearInterval(interval);
+// Function to measure Latency and Jitter
+async function measureLatency() {
+    const pings = [];
+    const url = "https://www.google.com/favicon.ico"; // Small file for latency
+    
+    for (let i = 0; i < 5; i++) {
+        const start = performance.now();
+        await fetch(url + "?t=" + Math.random(), { mode: 'no-cors' });
+        pings.push(performance.now() - start);
     }
-    const deg = (current / target) * maxDeg;
-    meter.style.background =
-      `conic-gradient(#38bdf8 ${deg}deg, rgba(255,255,255,.2) ${deg}deg)`;
-    speedEl.innerText = current.toFixed(1);
-  },40);
+
+    const avgPing = pings.reduce((a, b) => a + b) / pings.length;
+    const jitter = Math.abs(pings[pings.length - 1] - pings[0]);
+    
+    return { ping: avgPing.toFixed(0), jitter: jitter.toFixed(0) };
 }
 
-/* MAIN */
-async function startTest(){
-  speedEl.innerText = "0";
-  meter.style.background =
-    "conic-gradient(#38bdf8 0deg, rgba(255,255,255,.2) 0deg)";
-  resultEl.innerText = "Testing download speed...";
+// Main Test Logic
+async function runSpeedTest() {
+    startBtn.disabled = true;
+    startBtn.innerText = "TESTING...";
+    
+    // 1. Measure Latency
+    const latencyData = await measureLatency();
+    pingEl.innerText = latencyData.ping;
+    jitterEl.innerText = latencyData.jitter;
 
-  try{
-    const realSpeed = await getRealSpeed();
-    animateMeter(realSpeed);
-    setTimeout(()=>{
-      resultEl.innerHTML = `Download Speed: <b>${realSpeed} Mbps</b>`;
-    },1800);
-  }catch{
-    resultEl.innerText = "Speed test failed.";
-  }
+    // 2. Measure Speed (Download)
+    // Using a larger file for a longer animation (simulated or real)
+    const testUrl = "https://upload.wikimedia.org/wikipedia/commons/3/3f/Fronalpstock_big.jpg";
+    const startTime = performance.now();
+    
+    try {
+        const response = await fetch(testUrl + "?t=" + Math.random());
+        const blob = await response.blob();
+        const endTime = performance.now();
+        
+        const duration = (endTime - startTime) / 1000;
+        const bitsLoaded = blob.size * 8;
+        const speedMbps = (bitsLoaded / duration / 1024 / 1024).toFixed(2);
+
+        // Smoothly animate the needle to the result
+        animateValue(0, parseFloat(speedMbps), 2000, speedEl, true);
+
+    } catch (error) {
+        speedEl.innerText = "Err";
+    }
+
+    setTimeout(() => {
+        startBtn.disabled = false;
+        startBtn.innerText = "AGAIN";
+    }, 2500);
 }
 </script>
 
