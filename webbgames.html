@@ -22,6 +22,7 @@
             background: radial-gradient(circle at top right, #1e293b, #0b0f1a);
             color: #fff;
             display: flex;
+            flex-direction: column; /* Changed to column for sticky header flow */
             overflow-x: hidden;
         }
 
@@ -36,7 +37,7 @@
             position: fixed;
             left: -285px; 
             top: 0;
-            z-index: 3000;
+            z-index: 4000; /* Higher than header */
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -60,11 +61,11 @@
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.1);
         }
 
-        /* --- OPEN BUTTON --- */
+        /* --- FLOATING OPEN BUTTON --- */
         .open-sidebar-btn {
             position: fixed;
             left: 0;
-            top: 50%;
+            top: 55%; /* Slightly adjusted */
             transform: translateY(-50%);
             background: var(--primary);
             color: #000;
@@ -80,10 +81,7 @@
             box-shadow: 0 0 15px var(--glow);
         }
 
-        /* --- MAIN WRAPPER --- */
-        .main-wrapper { width: 100%; display: flex; flex-direction: column; min-height: 100vh; }
-
-        /* --- STICKY BLURRED HEADER --- */
+        /* --- STICKY HEADER --- */
         nav {
             width: 100%;
             padding: 15px 30px;
@@ -101,29 +99,34 @@
 
         .logo-box img { width: 160px; filter: drop-shadow(0 0 8px var(--primary)); }
 
-        .home-link {
-            text-decoration: none;
+        /* --- MENU BUTTON (Replaced Home) --- */
+        .menu-toggle-btn {
+            background: transparent;
             color: var(--primary);
             font-weight: 700;
             font-size: 13px;
-            padding: 8px 18px;
+            padding: 8px 22px;
             border: 1px solid var(--primary);
             border-radius: 50px;
+            cursor: pointer;
             transition: 0.3s;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .home-link:hover { 
+        .menu-toggle-btn:hover { 
             background: var(--primary); 
             color: #000; 
             box-shadow: 0 0 20px var(--glow);
         }
 
-        .content-area { padding: 30px; }
+        .content-area { padding: 30px; flex: 1; }
         .section-header { margin-bottom: 25px; }
         .section-header h2 { font-size: 26px; color: #fff; text-transform: uppercase; }
 
-        /* --- GAMES GRID & GLOW CARDS --- */
+        /* --- GAMES GRID --- */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -135,7 +138,6 @@
             border: 1px solid var(--border);
             border-radius: 20px;
             padding: 25px;
-            position: relative;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             min-height: 260px;
             display: flex;
@@ -144,7 +146,6 @@
             overflow: hidden;
         }
 
-        /* GLOW EFFECT ON HOVER */
         .game-card:not(.locked-card):hover {
             transform: translateY(-10px);
             border-color: var(--primary);
@@ -153,12 +154,9 @@
         }
 
         .game-icon { font-size: 40px; margin-bottom: 10px; transition: 0.3s; }
-        .game-card:hover .game-icon { transform: scale(1.1) rotate(5deg); }
-
         .game-card h3 { font-size: 18px; margin-bottom: 5px; color: #fff; }
         .game-card p { font-size: 12px; color: #94a3b8; }
 
-        /* PLAY BUTTON GLOW */
         .play-btn {
             background: var(--primary);
             color: #000;
@@ -174,25 +172,20 @@
             display: block;
         }
 
-        .game-card:not(.locked-card):hover .play-btn {
-            background: #fff;
-            box-shadow: 0 0 20px #fff, 0 0 40px var(--primary);
-            transform: scale(1.02);
-        }
-
         .locked-card { opacity: 0.5; cursor: not-allowed; }
         .locked-btn { background: #1e293b; color: #475569; }
 
-        /* MOBILE OPTIMIZATION (2-COLUMN) */
+        /* MOBILE OPTIMIZATION */
         @media (max-width: 600px) {
             nav { padding: 15px 20px; }
             .logo-box img { width: 130px; }
             .games-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .game-card { padding: 15px; min-height: 200px; border-radius: 15px; }
+            .game-card { padding: 15px; min-height: 200px; }
             .game-icon { font-size: 30px; }
             .game-card h3 { font-size: 13px; }
             .game-card p { display: none; }
             .play-btn { font-size: 10px; padding: 8px; }
+            .menu-toggle-btn { padding: 6px 14px; font-size: 11px; }
         }
 
         .glow-bg {
@@ -221,22 +214,21 @@
     </ul>
 </aside>
 
-<div class="main-wrapper">
-    <nav>
-        <div class="logo-box">
-            <img src="N-removebg-preview.png" alt="Logo">
-        </div>
-        <a href="#" class="home-link" onclick="loadCategory('trending')">🏠 HOME</a>
-    </nav>
-
-    <div class="content-area">
-        <div class="section-header">
-            <h2 id="cat-title">Trending Games</h2>
-        </div>
-
-        <div class="games-grid" id="game-display">
-            </div>
+<nav>
+    <div class="logo-box">
+        <img src="N-removebg-preview.png" alt="Logo">
     </div>
+    <button class="menu-toggle-btn" onclick="toggleSidebar()">
+        <span>☰</span> MENU
+    </button>
+</nav>
+
+<div class="content-area">
+    <div class="section-header">
+        <h2 id="cat-title">Trending Games</h2>
+    </div>
+    <div class="games-grid" id="game-display">
+        </div>
 </div>
 
 <script>
@@ -300,14 +292,17 @@
             grid.appendChild(card);
         });
 
+        // Auto-close sidebar on mobile after selection
         if(window.innerWidth < 1000) document.getElementById('sidebar').classList.remove('active');
 
+        // Update active class in sidebar items
         document.querySelectorAll('.category-item').forEach(el => {
             el.classList.remove('active');
             if(el.innerText.toLowerCase().includes(cat)) el.classList.add('active');
         });
     }
 
+    // Initial Load
     loadCategory('trending');
 </script>
 
