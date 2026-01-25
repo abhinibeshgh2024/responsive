@@ -84,6 +84,59 @@
       .img-nav-btn img { width: 60px; height: 60px; }
       .img-nav-btn span { font-size: 12px; }
     }
+    /* Footer Specific Styling */
+.footer-box {
+    text-align: center;
+    margin-top: 80px;
+    padding: 20px;
+}
+
+.footer-logo-center {
+    display: block;
+    margin: 0 auto 25px auto; /* Center alignment aur bottom gap */
+    width: 150px;             /* Header logo ke barabar size */
+    height: auto;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.15));
+    transition: transform 0.3s ease;
+}
+
+.footer-logo-center:hover {
+    transform: scale(1.05); /* Chhota sa hover effect */
+}
+
+.social-links {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.social-links a:hover {
+    color: #38bdf8; /* Hover color */
+}
+
+footer {
+    text-align: center;
+    padding: 30px 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 40px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+    .footer-logo-center {
+        width: 120px;
+    }
+}
   </style>
 </head>
 
@@ -155,22 +208,25 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  <div class="footer-box" style="text-align:center;margin-top: 50px;">
+ <div class="footer-box">
+    <img src="UniPlat.-rfemovebg-preview.png" alt="Unified Platform Logo" class="footer-logo-center">
+    
     <h4>Follow Us</h4>
-    <div class="social-links" style="margin-top: 36px;">
+    <div class="social-links">
         <a href="https://www.linkedin.com/company/gogenixwebb" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
         <a href="https://www.instagram.com/gogenix_weser/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
     </div>
-  </div>
+</div>
 
-  <footer>
+<footer>
     <p>© 2026 GoGenix Webb. United Platform by GoGenix WeSer. All rights reserved.</p>
-  </footer>
+</footer>
 
   <script src="scripthome.js"></script>
 
 </body>
 </html>
+
 
 
 
