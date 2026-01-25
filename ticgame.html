@@ -22,29 +22,28 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
             overflow-x: hidden;
         }
 
         /* HEADER */
         .game-header { text-align: center; margin-bottom: 20px; }
-        .logo-small { width: 140px; filter: drop-shadow(0 0 10px var(--primary)); cursor: pointer; }
+        .logo-small { width: 130px; filter: drop-shadow(0 0 10px var(--primary)); cursor: pointer; }
 
         /* SETUP BOX */
         .setup-container {
             background: var(--card);
             border: 1px solid var(--border);
-            padding: 25px;
+            padding: 20px;
             border-radius: 20px;
             backdrop-filter: blur(10px);
             width: 100%;
-            max-width: 450px;
-            margin-bottom: 20px;
+            max-width: 400px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        label { display: block; margin-bottom: 8px; font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+        .setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        label { display: block; margin-bottom: 8px; font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
 
         select, button {
             width: 100%;
@@ -55,24 +54,27 @@
             color: #fff;
             cursor: pointer;
             font-weight: 600;
-            transition: 0.3s;
         }
 
-        select:focus { border-color: var(--primary); outline: none; }
+        .toss-btn { background: var(--primary); color: #000; border: none; margin-top: 15px; font-size: 14px; }
 
-        .toss-btn { background: var(--primary); color: #000; border: none; margin-top: 15px; font-size: 14px; letter-spacing: 1px; }
-        .toss-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
-
-        /* GAME BOARD */
-        .board-wrapper { position: relative; margin: 20px auto; }
+        /* GAME BOARD WRAPPER (This constrains the flash) */
+        .board-wrapper { 
+            position: relative; 
+            margin: 20px auto; 
+            border-radius: 20px;
+            overflow: hidden; /* Important for local flash */
+        }
 
         #game-board {
             display: grid;
-            gap: 10px;
-            background: rgba(0,0,0,0.3);
-            padding: 12px;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
             border-radius: 20px;
-            display: none; /* Initial hide */
+            display: none; 
+            margin: 0 auto;
+            max-width: 95vw; /* Responsive for phone */
         }
 
         .cell {
@@ -83,83 +85,70 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
+            font-size: clamp(1.5rem, 8vw, 2.5rem); /* Scalable font */
             font-weight: 900;
             cursor: pointer;
-            transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.2s;
         }
 
-        .cell:hover { background: rgba(255,255,255,0.05); }
-        .cell.win-cell { 
-            background: rgba(56, 189, 248, 0.2); 
-            border-color: var(--primary); 
-            color: #fff !important;
+        /* WINNER FLASH (Now local to board) */
+        #winner-flash {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 15, 26, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            font-weight: 900;
+            color: #fff;
+            text-align: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.5s ease;
+            transform: scale(0.9);
+            border-radius: 20px;
+        }
+
+        #winner-flash.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .win-cell { 
+            background: rgba(56, 189, 248, 0.2) !important; 
+            border-color: var(--primary) !important;
             animation: pulse 1s infinite;
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
+            0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
         }
 
-       /* WINNER FLASH WITH TRANSPARENT BLUR BG */
-#winner-flash {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(11, 15, 26, 0.7); /* Dark Transparent */
-    backdrop-filter: blur(15px); /* Background Blur */
-    -webkit-backdrop-filter: blur(15px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: clamp(3rem, 10vw, 6rem);
-    font-weight: 900;
-    color: #fff;
-    text-shadow: 0 0 30px var(--primary);
-    z-index: 5000;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transform: scale(0.8);
-}
-
-#winner-flash.show {
-    opacity: 1;
-    pointer-events: auto;
-    transform: scale(1);
-}
+        .status-msg { height: 40px; margin: 15px 0; font-size: 1.2rem; color: var(--primary); font-weight: 700; text-align: center;}
 
         /* CONTROLS */
-        .controls { display: none; gap: 15px; margin-top: 20px; width: 100%; max-width: 400px; }
+        .controls { display: none; gap: 10px; width: 100%; max-width: 400px; }
         .btn-restart { border: 1px solid var(--primary); color: var(--primary); background: transparent; }
-        .btn-restart:hover { background: var(--primary); color: #000; }
         .btn-reset { border: 1px solid #ef4444; color: #ef4444; background: transparent; }
-        .btn-reset:hover { background: #ef4444; color: #fff; }
 
-        .status-msg { height: 40px; margin: 10px 0; font-size: 1.4rem; color: var(--primary); font-weight: 700; text-transform: uppercase; }
-
-        .back-link { 
-            margin-top: 30px; 
-            color: #64748b; 
-            text-decoration: none; 
-            font-size: 14px; 
-            transition: 0.3s;
-            font-weight: 500;
+        @media (max-width: 480px) {
+            .cell { border-radius: 8px; }
+            #game-board { gap: 6px; padding: 8px; }
         }
-        .back-link:hover { color: var(--primary); }
     </style>
 </head>
 <body>
 
-    <div id="winner-flash">WINNER!</div>
-
     <div class="game-header">
         <a href="webbgames.html"><img src="N-removebg-preview.png" alt="Logo" class="logo-small"></a>
-        <p style="letter-spacing: 4px; font-size: 12px; color: var(--secondary); margin-top: 5px;">GENIXIFIED GAMING</p>
     </div>
 
     <div class="setup-container" id="setup">
@@ -167,49 +156,45 @@
             <div>
                 <label>Grid Size</label>
                 <select id="grid-size">
-                    <option value="3">3 x 3 (Classic)</option>
-                    <option value="4">4 x 4 (Pro)</option>
-                    <option value="5">5 x 5 (Elite)</option>
+                    <option value="3">3 x 3</option>
+                    <option value="4">4 x 4</option>
+                    <option value="5">5 x 5</option>
                 </select>
             </div>
             <div>
-                <label>Choose Sign</label>
+                <label>Sign</label>
                 <select id="player-sign">
-                    <option value="X">Sign X</option>
-                    <option value="O">Sign O</option>
+                    <option value="X">X</option>
+                    <option value="O">O</option>
                 </select>
             </div>
         </div>
-        <button class="toss-btn" onclick="startToss()">START TOSS & PLAY</button>
+        <button class="toss-btn" onclick="startToss()">TOSS & PLAY</button>
     </div>
 
-    <div class="status-msg" id="status">Waiting for setup...</div>
+    <div class="status-msg" id="status">Waiting...</div>
 
     <div class="board-wrapper">
+        <div id="winner-flash">WINNER!</div>
         <div id="game-board"></div>
     </div>
 
     <div class="controls" id="controls">
-        <button class="btn-restart" onclick="restartGrid()">RESTART GRID</button>
-        <button class="btn-reset" onclick="location.reload()">FULL RESET</button>
+        <button class="btn-restart" onclick="restartGrid()">RESTART</button>
+        <button class="btn-reset" onclick="location.reload()">RESET ALL</button>
     </div>
-
-    <a href="webbgames.html" class="back-link">← Back to WebbJamm</a>
 
     <script>
         let board = [], size = 3, currentPlayer = "", gameActive = false;
 
         function startToss() {
             const status = document.getElementById('status');
-            status.innerText = "TOSSING COIN...";
-            status.style.color = "var(--secondary)";
-            
+            status.innerText = "TOSSING...";
             setTimeout(() => {
                 currentPlayer = Math.random() > 0.5 ? "X" : "O";
-                status.innerText = `WINNER: PLAYER ${currentPlayer}`;
-                status.style.color = "var(--primary)";
+                status.innerText = `STARTS WITH: ${currentPlayer}`;
                 setTimeout(initGame, 1000);
-            }, 1200);
+            }, 1000);
         }
 
         function initGame() {
@@ -220,9 +205,9 @@
             boardEl.style.display = "grid";
             boardEl.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
             
-            // Adjust width based on size
-            const cellSize = size === 3 ? 90 : 70;
-            boardEl.style.width = (size * cellSize) + "px";
+            // Fixed width for desktop, 90vw for mobile
+            const containerWidth = window.innerWidth > 500 ? (size * 85) : (window.innerWidth * 0.9);
+            boardEl.style.width = containerWidth + "px";
             boardEl.innerHTML = "";
 
             for (let i = 0; i < size * size; i++) {
@@ -240,7 +225,6 @@
 
         function handleMove(index) {
             if (board[index] !== "" || !gameActive) return;
-
             board[index] = currentPlayer;
             const cells = document.querySelectorAll('.cell');
             cells[index].innerText = currentPlayer;
@@ -249,14 +233,13 @@
             const winData = checkWin();
             if (winData) {
                 highlightWinner(winData);
-                showFlash(`PLAYER ${currentPlayer} WINS!`);
+                showFlash(`PLAYER ${currentPlayer}\nIS THE WINNER!`);
                 gameActive = false;
                 return;
             }
 
             if (!board.includes("")) {
                 showFlash("IT'S A DRAW!");
-                document.getElementById('status').innerText = "GAME OVER";
                 gameActive = false;
                 return;
             }
@@ -267,26 +250,20 @@
 
         function checkWin() {
             const lines = [];
-            // Rows
             for (let i = 0; i < size; i++) {
-                let row = [];
-                for (let j = 0; j < size; j++) row.push(i * size + j);
-                lines.push(row);
+                let row = [], col = [];
+                for (let j = 0; j < size; j++) {
+                    row.push(i * size + j);
+                    col.push(j * size + i);
+                }
+                lines.push(row, col);
             }
-            // Cols
-            for (let i = 0; i < size; i++) {
-                let col = [];
-                for (let j = 0; j < size; j++) col.push(j * size + i);
-                lines.push(col);
-            }
-            // Diagonals
             let d1 = [], d2 = [];
             for (let i = 0; i < size; i++) {
                 d1.push(i * size + i);
                 d2.push(i * size + (size - 1 - i));
             }
             lines.push(d1, d2);
-
             for (let line of lines) {
                 if (line.every(idx => board[idx] === currentPlayer)) return line;
             }
@@ -296,26 +273,24 @@
         function highlightWinner(indices) {
             const cells = document.querySelectorAll('.cell');
             indices.forEach(idx => cells[idx].classList.add('win-cell'));
-            document.getElementById('status').innerText = `🏆 PLAYER ${currentPlayer} WON!`;
         }
 
         function showFlash(msg) {
             const flash = document.getElementById('winner-flash');
             flash.innerText = msg;
             flash.classList.add('show');
-            setTimeout(() => flash.classList.remove('show'), 2500);
         }
 
-        // RESTART GRID ONLY (Wahi se dobara shuru)
         function restartGrid() {
             board = Array(size * size).fill("");
+            document.getElementById('winner-flash').classList.remove('show');
             document.querySelectorAll('.cell').forEach(c => {
                 c.innerText = "";
                 c.className = 'cell';
                 c.style.color = "#fff";
             });
             gameActive = true;
-            document.getElementById('status').innerText = `RESTARTED! TURN: ${currentPlayer}`;
+            document.getElementById('status').innerText = `TURN: PLAYER ${currentPlayer}`;
         }
     </script>
 </body>
