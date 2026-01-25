@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
-    <title>WebbJamm | Flappy Neon</title>
+    <title>WebbJamm | Flappy Bird</title>
     <style>
         :root {
             --primary: #38bdf8;
@@ -26,7 +26,7 @@
             overflow: hidden; touch-action: none;
         }
 
-        /* --- CONFIG MENU --- */
+        /* --- HEADER --- */
         nav { width: 100%; padding: 20px 0; display: flex; justify-content: center; align-items: center; }
         .logo-small { width: 140px; filter: drop-shadow(0 0 10px var(--primary)); }
 
@@ -45,9 +45,15 @@
             background: #1e293b; border: 1px solid var(--border); color: #fff;
         }
 
+        /* --- BUTTON GLOW EFFECTS --- */
         .start-btn { 
             width: 100%; padding: 16px; background: var(--primary); 
-            color: #000; border: none; border-radius: 14px; font-weight: 800; cursor: pointer;
+            color: #000; border: none; border-radius: 14px; font-weight: 800; 
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .start-btn:hover {
+            box-shadow: 0 0 20px var(--primary);
+            transform: scale(1.02);
         }
 
         .back-link {
@@ -55,7 +61,11 @@
             text-decoration: none; font-size: 13px; font-weight: 600;
             transition: all 0.3s ease;
         }
-        .back-link:hover { color: var(--primary); transform: translateY(-2px); }
+        .back-link:hover { 
+            color: var(--primary); 
+            text-shadow: 0 0 10px var(--primary);
+            transform: translateY(-2px); 
+        }
 
         /* --- GAME ENGINE --- */
         #game-area {
@@ -68,8 +78,9 @@
         }
         .canvas-back {
             color: var(--primary); font-weight: 800; font-size: 12px; border: 1px solid var(--primary);
-            padding: 8px 15px; border-radius: 50px; cursor: pointer;
+            padding: 8px 15px; border-radius: 50px; cursor: pointer; transition: 0.3s;
         }
+        .canvas-back:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary); }
 
         .board-wrapper {
             position: relative; border: 3px solid var(--border); border-radius: 20px;
@@ -138,7 +149,7 @@
             <div id="overlay">
                 <h1 style="color: #ef4444; font-size: 28px; margin-bottom: 10px;">CRASHED!</h1>
                 <p id="finalScore" style="font-size: 18px; margin-bottom: 20px;"></p>
-                <button class="start-btn" style="width: 150px;" onclick="location.reload()">RETRY</button>
+                <button class="start-btn" style="width: 150px;" onclick="restartGame()">RETRY</button>
             </div>
             <canvas id="flappyCanvas"></canvas>
         </div>
@@ -168,7 +179,12 @@
             const elem = document.documentElement;
             if (elem.requestFullscreen) elem.requestFullscreen().catch(() => {});
             
-            isPlaying = true;
+            initGame();
+        }
+
+        // Ye function game ko wapas zero se start karta hai bina menu par gaye
+        function restartGame() {
+            document.getElementById('overlay').style.display = "none";
             initGame();
         }
 
@@ -176,7 +192,10 @@
             bird = { x: 50, y: 200, w: 30, h: 25, velocity: 0 };
             pipes = [];
             score = 0;
-            pipes.push({ x: canvas.width, top: 150, bottom: 300 }); // Initial pipe
+            document.getElementById('scoreText').innerText = "0";
+            pipes.push({ x: canvas.width, top: 150, bottom: 300 }); 
+            isPlaying = true;
+            if(gameLoop) clearInterval(gameLoop);
             gameLoop = setInterval(update, 1000/60);
         }
 
@@ -184,7 +203,6 @@
             if(isPlaying) bird.velocity = jump;
         }
 
-        // CONTROLS
         window.addEventListener("keydown", e => { if(e.code === "Space") flap(); });
         canvas.addEventListener("touchstart", e => { e.preventDefault(); flap(); });
         canvas.addEventListener("mousedown", flap);
@@ -194,11 +212,9 @@
         }
 
         function update() {
-            // Bird Movement
             bird.velocity += gravity;
             bird.y += bird.velocity;
 
-            // Pipe Logic
             if(pipes.length > 0 && pipes[0].x < -50) pipes.shift();
             
             if(pipes[pipes.length-1].x < canvas.width - 250) {
@@ -210,22 +226,16 @@
 
             for(let p of pipes) {
                 p.x -= pipeSpeed;
-
-                // Collision Detection
                 if(bird.x + bird.w > p.x && bird.x < p.x + 50) {
                     if(bird.y < p.top || bird.y + bird.h > p.bottom) gameOver();
                 }
-
-                // Scoring
                 if(p.x + 50 < bird.x && !p.passed) {
                     p.passed = true;
                     score++;
                     document.getElementById('scoreText').innerText = score;
                 }
             }
-
             if(bird.y + bird.h > canvas.height || bird.y < 0) gameOver();
-
             draw();
         }
 
@@ -233,19 +243,15 @@
             ctx.fillStyle = "#000";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Draw Pipes
             ctx.fillStyle = "#1e293b";
-            ctx.shadowBlur = 0;
             for(let p of pipes) {
                 ctx.fillRect(p.x, 0, 50, p.top);
                 ctx.fillRect(p.x, p.bottom, 50, canvas.height - p.bottom);
-                // Pipe Border
-                ctx.strokeStyle = varColor('--border');
+                ctx.strokeStyle = "rgba(56, 189, 248, 0.2)";
                 ctx.strokeRect(p.x, 0, 50, p.top);
                 ctx.strokeRect(p.x, p.bottom, 50, canvas.height - p.bottom);
             }
 
-            // Draw Bird (Neon Box style)
             ctx.fillStyle = bColor;
             ctx.shadowBlur = 15;
             ctx.shadowColor = bColor;
@@ -255,16 +261,11 @@
             ctx.shadowBlur = 0;
         }
 
-        function varColor(name) {
-            return getComputedStyle(document.documentElement).getPropertyValue(name);
-        }
-
         function gameOver() {
             clearInterval(gameLoop);
             isPlaying = false;
             document.getElementById('overlay').style.display = "flex";
             document.getElementById('finalScore').innerText = "SCORE: " + score;
-            if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
         }
     </script>
 </body>
