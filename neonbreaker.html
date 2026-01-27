@@ -1,30 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>WebbJamm | Neon Breaker Ultra</title>
+    <meta name="description" content="Play WebbJamm Neon Breaker - High speed arcade action with multi-ball power-ups and pro levels.">
+    <meta name="keywords" content="WebbJamm, Neon Games, Online Arcade, Brick Breaker, HTML5 Games">
+    <meta name="title" content="WebbJamm | Play Neon Retro Games Online">
+<meta name="description" content="Play high-speed neon arcade games like Breaker, Ludo, and Flappy on WebbJamm. Free browser games with pro levels and power-ups.">
+
+<meta name="keywords" content="WebbJamm, Neon Games, Online Arcade Games, Brick Breaker Neon, Multi-ball Ludo, HTML5 Games, Browser Games, Retro Gaming">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https:gogenixwebb.xyz">
+<meta property="og:title" content="WebbJamm - The Future of Neon Arcade">
+<meta property="og:description" content="Experience the best neon-themed browser games. Ready for the challenge?">
+<meta property="og:image" content="N-removebg-preview.png">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
-    <title>WebbJamm | Neon Breaker</title>
     <style>
         :root { --primary: #38bdf8; --secondary: #c084fc; --bg: #0b0f1a; --border: rgba(255, 255, 255, 0.1); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; overflow: hidden; }
         body { background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; touch-action: none; }
+        
         nav { width: 100%; padding: 25px 0 10px 0; display: flex; justify-content: center; }
         .logo-small { width: 150px; filter: drop-shadow(0 0 12px var(--primary)); }
-        .setup-container { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 30px; border-radius: 24px; backdrop-filter: blur(15px); width: 90%; max-width: 400px; text-align: center; }
-        .start-btn { width: 100%; padding: 16px; background: var(--primary); color: #000; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px var(--primary); }
+        
+        /* Standard Blue Glowing Button Style */
+        .neon-btn-style {
+            background: var(--primary); color: #000; border: none; 
+            border-radius: 12px; font-weight: 800; cursor: pointer; 
+            box-shadow: 0 0 20px var(--primary); text-transform: uppercase;
+        }
+
+        .setup-container { 
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); 
+            padding: 30px; border-radius: 24px; backdrop-filter: blur(15px); 
+            width: 90%; max-width: 400px; text-align: center; 
+        }
+        
+        .start-btn { width: 100%; padding: 16px; margin-top: 10px; transition: 0.3s; }
+        .start-btn:hover { transform: scale(1.02); box-shadow: 0 0 30px var(--primary); }
+
         #game-area { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; width: 100%; }
-        canvas { background: #000; border: 3px solid var(--border); border-radius: 15px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        canvas { background: #000; border: 3px solid var(--border); border-radius: 15px; box-shadow: 0 0 40px rgba(0,0,0,0.8); }
+        
         .score-ui { position: absolute; top: 20px; width: 90%; display: flex; justify-content: space-between; font-weight: 800; z-index: 10; pointer-events: none; }
     </style>
 </head>
 <body>
 
-    <nav id="main-nav"><img src="N-removebg-preview.png" class="logo-small"></nav>
+    <nav id="main-nav"><img src="N-removebg-preview.png" alt="WebbJamm Logo" class="logo-small"></nav>
 
     <div class="setup-container" id="setup">
         <h2 style="color: var(--secondary); letter-spacing: 2px; margin-bottom: 10px;">NEON BREAKER</h2>
-        <p style="color: #64748b; font-size: 13px; margin-bottom: 25px;">Multi-Ball 🏀 Power-up Enabled!<br>High Performance Gaming.</p>
-        <button class="start-btn" onclick="startGame()">START MISSION</button>
+        <p style="color: #64748b; font-size: 13px; margin-bottom: 25px;">Mission: Destroy all bricks.<br>Power-ups: 💊 ❄️ 🏀</p>
+        <button class="neon-btn-style start-btn" onclick="startGame()">START MISSION</button>
     </div>
 
     <div id="game-area">
@@ -45,18 +75,16 @@
         let score = 0, currentLevel = 1, gameState = "PLAY"; 
         let pointsSinceLastPowerup = 0;
 
-        // Button Rects
-        const menuBtn = { x: 0, y: 0, w: 180, h: 50 }; 
-        const quitBtn = { x: 0, y: 0, w: 80, h: 35 };
+        // Button Positions (Canvas Based)
+        const menuBtn = { w: 180, h: 50 }; 
+        const quitBtn = { w: 80, h: 35 };
 
         function startGame() {
             document.getElementById('setup').style.display = "none";
             document.getElementById('main-nav').style.display = "none";
             document.getElementById('game-area').style.display = "flex";
             canvas.width = Math.min(window.innerWidth - 30, 400);
-            canvas.height = 550; // Increased for quit space
-            menuBtn.x = canvas.width/2 - 90; menuBtn.y = canvas.height/2 + 30;
-            quitBtn.x = canvas.width - 95; quitBtn.y = canvas.height - 45;
+            canvas.height = 550;
             resetLevel();
             requestAnimationFrame(gameLoop);
         }
@@ -64,7 +92,7 @@
         function resetLevel() {
             gameState = "PLAY"; paddleWidth = 85; pointsSinceLastPowerup = 0; powerups = [];
             paddleX = (canvas.width - paddleWidth) / 2;
-            balls = [{ x: canvas.width/2, y: canvas.height-100, dx: 4, dy: -4 }];
+            balls = [{ x: canvas.width/2, y: canvas.height-120, dx: 4, dy: -4 }];
             createBricks();
         }
 
@@ -80,19 +108,21 @@
             }
         }
 
+        // Button Click Logic
         canvas.addEventListener("click", (e) => {
             const rect = canvas.getBoundingClientRect();
             const cx = e.clientX - rect.left;
             const cy = e.clientY - rect.top;
 
-            // Quit Button logic (anytime)
-            if(cx > quitBtn.x && cx < quitBtn.x + quitBtn.w && cy > quitBtn.y && cy < quitBtn.y + quitBtn.h) {
+            // Quit Button Click
+            if(cx > canvas.width - 95 && cx < canvas.width - 15 && cy > canvas.height - 45 && cy < canvas.height - 10) {
                 location.reload();
             }
 
-            // Menu Buttons logic (on Game Over/Win)
+            // Overlay Button Click
             if(gameState !== "PLAY") {
-                if(cx > menuBtn.x && cx < menuBtn.x + menuBtn.w && cy > menuBtn.y && cy < menuBtn.y + menuBtn.h) {
+                let bx = canvas.width/2 - 90; let by = canvas.height/2 + 30;
+                if(cx > bx && cx < bx + menuBtn.w && cy > by && cy < by + menuBtn.h) {
                     if(gameState === "GAMEOVER") { score = 0; currentLevel = 1; }
                     else { currentLevel++; }
                     resetLevel();
@@ -100,14 +130,18 @@
             }
         });
 
-        window.addEventListener("mousemove", e => { if(gameState === "PLAY") { let relX = e.clientX - canvas.offsetLeft; paddleX = Math.max(0, Math.min(canvas.width - paddleWidth, relX - paddleWidth/2)); }});
-        window.addEventListener("touchmove", e => { if(gameState === "PLAY") { let relX = e.touches[0].clientX - canvas.offsetLeft; paddleX = Math.max(0, Math.min(canvas.width - paddleWidth, relX - paddleWidth/2)); }});
+        const updatePaddle = (clientX) => {
+            let relX = clientX - canvas.offsetLeft;
+            paddleX = Math.max(0, Math.min(canvas.width - paddleWidth, relX - paddleWidth/2));
+        };
+        window.addEventListener("mousemove", e => { if(gameState === "PLAY") updatePaddle(e.clientX); });
+        window.addEventListener("touchmove", e => { if(gameState === "PLAY") updatePaddle(e.touches[0].clientX); });
 
         function gameLoop() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if(gameState === "PLAY") { update(); draw(); } 
             else { drawOverlay(); }
-            drawQuit();
+            drawQuitBtn();
             requestAnimationFrame(gameLoop);
         }
 
@@ -133,9 +167,9 @@
             powerups.forEach((p, i) => {
                 p.y += 2.5;
                 if(p.y > canvas.height-90 && p.x > paddleX && p.x < paddleX+paddleWidth) {
-                    if(p.type === '🏀') { balls.push({x: paddleX+paddleWidth/2, y: canvas.height-100, dx: -4, dy: -4}); }
-                    if(p.type === '💊') paddleWidth = 150;
-                    if(p.type === '❄️') balls.forEach(b => { b.dx *= 0.6; b.dy *= 0.6; });
+                    if(p.type === '🏀') { balls.push({x: paddleX+paddleWidth/2, y: canvas.height-120, dx: -4, dy: -4}); }
+                    if(p.type === '💊') paddleWidth = 140;
+                    if(p.type === '❄️') balls.forEach(b => { b.dx *= 0.7; b.dy *= 0.7; });
                     powerups.splice(i, 1);
                 }
             });
@@ -168,33 +202,34 @@
                     }
                 }
             }
-            powerups.forEach(p => { ctx.font = "24px Arial"; ctx.fillText(p.type, p.x-10, p.y); });
+            powerups.forEach(p => { ctx.font = "24px Arial"; ctx.fillText(p.type, p.x-12, p.y); });
             balls.forEach(ball => { ctx.beginPath(); ctx.arc(ball.x, ball.y, ballRadius, 0, Math.PI*2); ctx.fillStyle = "#fff"; ctx.fill(); });
             ctx.fillStyle = "#38bdf8"; ctx.shadowBlur = 15; ctx.shadowColor = "#38bdf8";
             ctx.fillRect(paddleX, canvas.height-90, paddleWidth, paddleHeight); ctx.shadowBlur = 0;
         }
 
-        function drawQuit() {
-            ctx.strokeStyle = "#ff4757"; ctx.lineWidth = 2; ctx.shadowBlur = 10; ctx.shadowColor = "#ff4757";
-            ctx.strokeRect(quitBtn.x, quitBtn.y, quitBtn.w, quitBtn.h);
-            ctx.fillStyle = "#ff4757"; ctx.font = "bold 14px Inter"; ctx.textAlign = "center";
-            ctx.fillText("QUIT", quitBtn.x + 40, quitBtn.y + 22); ctx.shadowBlur = 0;
+        // DRAW BLUE GLOWING BUTTONS ON CANVAS
+        function drawBlueButton(x, y, w, h, text) {
+            ctx.shadowBlur = 20; ctx.shadowColor = "#38bdf8";
+            ctx.fillStyle = "#38bdf8";
+            ctx.beginPath(); ctx.roundRect(x, y, w, h, 10); ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = "#000"; ctx.font = "bold 16px Inter"; ctx.textAlign = "center";
+            ctx.fillText(text, x + w/2, y + h/1.7);
+        }
+
+        function drawQuitBtn() {
+            drawBlueButton(canvas.width - 95, canvas.height - 45, 80, 35, "QUIT");
         }
 
         function drawOverlay() {
             ctx.fillStyle = "rgba(11, 15, 26, 0.95)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.textAlign = "center";
-            const col = gameState === "WIN" ? "#4ade80" : "#ef4444";
+            const isWin = gameState === "WIN";
+            ctx.fillStyle = isWin ? "#4ade80" : "#ef4444"; ctx.font = "bold 32px Inter";
+            ctx.fillText(isWin ? "MISSION SUCCESS" : "MISSION FAILED", canvas.width/2, canvas.height/2 - 20);
             
-            ctx.fillStyle = col; ctx.font = "bold 32px Inter";
-            ctx.fillText(gameState === "WIN" ? "MISSION SUCCESS" : "MISSION FAILED", canvas.width/2, canvas.height/2 - 20);
-            
-            // Neon Menu Button
-            ctx.strokeStyle = col; ctx.lineWidth = 3; ctx.shadowBlur = 15; ctx.shadowColor = col;
-            ctx.strokeRect(menuBtn.x, menuBtn.y, menuBtn.w, menuBtn.h);
-            ctx.fillStyle = col; ctx.font = "bold 20px Inter";
-            ctx.fillText(gameState === "WIN" ? "NEXT LEVEL" : "RETRY", canvas.width/2, menuBtn.y + 33);
-            ctx.shadowBlur = 0;
+            drawBlueButton(canvas.width/2 - 90, canvas.height/2 + 30, 180, 50, isWin ? "NEXT LEVEL" : "RETRY");
         }
     </script>
 </body>
