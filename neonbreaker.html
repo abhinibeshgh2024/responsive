@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
+    <title>WebbJamm | Neon Breaker</title>
+    <style>
+        :root {
+            --primary: #38bdf8;
+            --secondary: #c084fc;
+            --bg: #0b0f1a;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; overflow: hidden; }
+        body { background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; touch-action: none; }
+
+        /* --- CONFIG MENU --- */
+        .setup-container {
+            margin-top: 50px; background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+            padding: 30px; border-radius: 24px; backdrop-filter: blur(15px);
+            width: 90%; max-width: 400px; text-align: center;
+        }
+
+        .start-btn { 
+            width: 100%; padding: 16px; background: var(--primary); color: #000; 
+            border: none; border-radius: 14px; font-weight: 800; cursor: pointer; transition: 0.3s;
+        }
+        .start-btn:hover { box-shadow: 0 0 20px var(--primary); transform: translateY(-2px); }
+
+        /* --- GAME ENGINE --- */
+        #game-area { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; width: 100%; }
+        canvas { 
+            background: #000; border: 3px solid var(--border); border-radius: 15px; 
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.1); max-width: 95vw;
+        }
+        
+        .score-ui { position: absolute; top: 20px; font-size: 20px; font-weight: 800; color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <div class="setup-container" id="setup">
+        <h2 style="color: var(--secondary); letter-spacing: 2px; margin-bottom: 20px;">NEON BREAKER</h2>
+        <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">Destroy bricks to win! <br> Use Mouse/Finger to move paddle.</p>
+        <button class="start-btn" onclick="startGame()">START MISSION</button>
+        <a href="webbgames.html" style="display:block; margin-top:20px; color:#444; text-decoration:none; font-size:12px;">← BACK TO WEBBJAMM</a>
+    </div>
+
+    <div id="game-area">
+        <div class="score-ui">SCORE: <span id="scoreText">0</span></div>
+        <canvas id="breakerCanvas"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("breakerCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let paddleWidth = 80, paddleHeight = 12;
+        let paddleX, ballX, ballY, dx, dy, score = 0;
+        let ballRadius = 7;
+        let bricks = [];
+        let rowCount = 5, colCount = 6;
+        let isPlaying = false;
+
+        function startGame() {
+            document.getElementById('setup').style.display = "none";
+            document.getElementById('game-area').style.display = "flex";
+            canvas.width = Math.min(window.innerWidth - 30, 400);
+            canvas.height = 500;
+            initGame();
+        }
+
+        function initGame() {
+            paddleX = (canvas.width - paddleWidth) / 2;
+            ballX = canvas.width / 2;
+            ballY = canvas.height - 30;
+            dx = 3; dy = -3;
+            score = 0;
+            
+            // Bricks creation
+            for(let c=0; c<colCount; c++) {
+                bricks[c] = [];
+                for(let r=0; r<rowCount; r++) {
+                    bricks[c][r] = { x: 0, y: 0, status: 1 };
+                }
+            }
+            isPlaying = true;
+            requestAnimationFrame(draw);
+        }
+
+        // Controls
+        document.addEventListener("mousemove", (e) => {
+            let relativeX = e.clientX - canvas.offsetLeft;
+            if(relativeX > 0 && relativeX < canvas.width) paddleX = relativeX - paddleWidth/2;
+        });
+        document.addEventListener("touchmove", (e) => {
+            let relativeX = e.touches[0].clientX - canvas.offsetLeft;
+            if(relativeX > 0 && relativeX < canvas.width) paddleX = relativeX - paddleWidth/2;
+        });
+
+        function drawBricks() {
+            for(let c=0; c<colCount; c++) {
+                for(let r=0; r<rowCount; r++) {
+                    if(bricks[c][r].status === 1) {
+                        let brickX = (c*(60+5))+20;
+                        let brickY = (r*(20+5))+50;
+                        bricks[c][r].x = brickX;
+                        bricks[c][r].y = brickY;
+                        ctx.beginPath();
+                        ctx.roundRect(brickX, brickY, 55, 18, 4);
+                        ctx.fillStyle = r % 2 === 0 ? "#38bdf8" : "#c084fc";
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+                }
+            }
+        }
+
+        function collisionDetection() {
+            for(let c=0; c<colCount; c++) {
+                for(let r=0; r<rowCount; r++) {
+                    let b = bricks[c][r];
+                    if(b.status === 1) {
+                        if(ballX > b.x && ballX < b.x+55 && ballY > b.y && ballY < b.y+18) {
+                            dy = -dy;
+                            b.status = 0;
+                            score++;
+                            document.getElementById('scoreText').innerText = score;
+                            if(score === rowCount*colCount) { alert("YOU WIN!"); location.reload(); }
+                        }
+                    }
+                }
+            }
+        }
+
+        function draw() {
+            if(!isPlaying) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBricks();
+            
+            // Ball
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, ballRadius, 0, Math.PI*2);
+            ctx.fillStyle = "#fff";
+            ctx.shadowBlur = 10; ctx.shadowColor = "#fff";
+            ctx.fill();
+            ctx.closePath();
+
+            // Paddle
+            ctx.beginPath();
+            ctx.roundRect(paddleX, canvas.height-paddleHeight-10, paddleWidth, paddleHeight, 5);
+            ctx.fillStyle = varColor('--primary');
+            ctx.shadowBlur = 15; ctx.shadowColor = varColor('--primary');
+            ctx.fill();
+            ctx.closePath();
+
+            collisionDetection();
+
+            // Wall Bounce
+            if(ballX + dx > canvas.width-ballRadius || ballX + dx < ballRadius) dx = -dx;
+            if(ballY + dy < ballRadius) dy = -dy;
+            else if(ballY + dy > canvas.height-ballRadius-10) {
+                if(ballX > paddleX && ballX < paddleX + paddleWidth) dy = -dy;
+                else { isPlaying = false; alert("GAME OVER"); location.reload(); }
+            }
+
+            ballX += dx; ballY += dy;
+            requestAnimationFrame(draw);
+        }
+
+        function varColor(name) { return getComputedStyle(document.documentElement).getPropertyValue(name); }
+    </script>
+</body>
+</html>
