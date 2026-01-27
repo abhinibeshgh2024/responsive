@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WebbJamm | Tetris Genix</title>
+    <meta name="description" content="Play Tetris Genix - Neon block puzzle action on WebbJamm. Stack, clear lines, and beat the high score.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
+    <style>
+        :root { --primary: #38bdf8; --secondary: #c084fc; --bg: #0b0f1a; --border: rgba(255, 255, 255, 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; overflow: hidden; }
+        body { background: var(--bg); color: #fff; display: flex; flex-direction: column; align-items: center; touch-action: none; }
+        
+        nav { width: 100%; padding: 25px 0 10px 0; display: flex; justify-content: center; }
+        .logo-small { width: 150px; filter: drop-shadow(0 0 12px var(--primary)); }
+        
+        /* Unified Blue Glowing Style */
+        .neon-btn-style {
+            background: var(--primary); color: #000; border: none; 
+            border-radius: 12px; font-weight: 800; cursor: pointer; 
+            box-shadow: 0 0 20px var(--primary); text-transform: uppercase; transition: 0.3s;
+        }
+        .neon-btn-style:hover { transform: scale(1.05); box-shadow: 0 0 30px var(--primary); }
+
+        .setup-container { 
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); 
+            padding: 30px; border-radius: 24px; backdrop-filter: blur(15px); 
+            width: 90%; max-width: 400px; text-align: center; 
+        }
+
+        #game-area { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; width: 100%; }
+        canvas { background: #000; border: 3px solid var(--border); border-radius: 10px; box-shadow: 0 0 40px rgba(0,0,0,0.8); }
+        
+        .score-ui { position: absolute; top: 20px; width: 90%; display: flex; justify-content: space-between; font-weight: 800; z-index: 10; }
+        .controls { margin-top: 15px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 280px; }
+        .control-btn { padding: 15px; font-size: 20px; }
+    </style>
+</head>
+<body>
+
+    <nav id="main-nav"><img src="N-removebg-preview.png" alt="WebbJamm Logo" class="logo-small"></nav>
+
+    <div class="setup-container" id="setup">
+        <h2 style="color: var(--secondary); letter-spacing: 2px; margin-bottom: 10px;">TETRIS GENIX</h2>
+        <p style="color: #64748b; font-size: 13px; margin-bottom: 25px;">Clear lines to level up.<br>Use buttons or Swipe to move.</p>
+        <button class="neon-btn-style" style="width: 100%; padding: 16px;" onclick="startGame()">START MISSION</button>
+    </div>
+
+    <div id="game-area">
+        <div class="score-ui">
+            <div style="color: var(--primary)">SCORE: <span id="scoreText">0</span></div>
+            <div style="color: var(--secondary)">GENIX MODE</div>
+        </div>
+        <canvas id="tetris"></canvas>
+        
+        <div class="controls">
+            <button class="neon-btn-style control-btn" onclick="move(-1)">◀</button>
+            <button class="neon-btn-style control-btn" onclick="rotate()">↻</button>
+            <button class="neon-btn-style control-btn" onclick="move(1)">▶</button>
+            <div></div>
+            <button class="neon-btn-style control-btn" onclick="drop()">▼</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('tetris');
+        const context = canvas.getContext('2d');
+        const scoreElement = document.getElementById('scoreText');
+
+        context.scale(20, 20);
+
+        function startGame() {
+            document.getElementById('setup').style.display = "none";
+            document.getElementById('main-nav').style.display = "none";
+            document.getElementById('game-area').style.display = "flex";
+            canvas.width = 240;
+            canvas.height = 400;
+            context.scale(20, 20);
+            resetPlayer();
+            updateScore();
+            update();
+        }
+
+        function arenaSweep() {
+            let rowCount = 1;
+            outer: for (let y = arena.length - 1; y > 0; --y) {
+                for (let x = 0; x < arena[y].length; ++x) {
+                    if (arena[y][x] === 0) continue outer;
+                }
+                const row = arena.splice(y, 1)[0].fill(0);
+                arena.unshift(row);
+                ++y;
+                player.score += rowCount * 10;
+                rowCount *= 2;
+            }
+            updateScore();
+        }
+
+        function collide(arena, player) {
+            const [m, o] = [player.matrix, player.pos];
+            for (let y = 0; y < m.length; ++y) {
+                for (let x = 0; x < m[y].length; ++x) {
+                    if (m[y][x] !== 0 && (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0) return true;
+                }
+            }
+            return false;
+        }
+
+        function createMatrix(w, h) {
+            const matrix = [];
+            while (h--) matrix.push(new Array(w).fill(0));
+            return matrix;
+        }
+
+        function createPiece(type) {
+            if (type === 'T') return [[0, 0, 0], [1, 1, 1], [0, 1, 0]];
+            else if (type === 'O') return [[2, 2], [2, 2]];
+            else if (type === 'L') return [[0, 3, 0], [0, 3, 0], [0, 3, 3]];
+            else if (type === 'J') return [[0, 4, 0], [0, 4, 0], [4, 4, 0]];
+            else if (type === 'I') return [[0, 5, 0, 0], [0, 5, 0, 0], [0, 5, 0, 0], [0, 5, 0, 0]];
+            else if (type === 'S') return [[0, 6, 6], [6, 6, 0], [0, 0, 0]];
+            else if (type === 'Z') return [[7, 7, 0], [0, 7, 7], [0, 0, 0]];
+        }
+
+        function draw() {
+            context.fillStyle = '#000';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            drawMatrix(arena, {x: 0, y: 0});
+            drawMatrix(player.matrix, player.pos);
+            drawQuitOnCanvas();
+        }
+
+        const colors = [null, '#38bdf8', '#c084fc', '#facc15', '#fb7185', '#4ade80', '#6366f1', '#a855f7'];
+
+        function drawMatrix(matrix, offset) {
+            matrix.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value !== 0) {
+                        context.shadowBlur = 10;
+                        context.shadowColor = colors[value];
+                        context.fillStyle = colors[value];
+                        context.fillRect(x + offset.x, y + offset.y, 0.9, 0.9);
+                        context.shadowBlur = 0;
+                    }
+                });
+            });
+        }
+
+        function merge(arena, player) {
+            player.matrix.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value !== 0) arena[y + player.pos.y][x + player.pos.x] = value;
+                });
+            });
+        }
+
+        function rotateMatrix(matrix, dir) {
+            for (let y = 0; y < matrix.length; ++y) {
+                for (let x = 0; x < y; ++x) [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
+            }
+            if (dir > 0) matrix.forEach(row => row.reverse());
+            else matrix.reverse();
+        }
+
+        function playerDrop() {
+            player.pos.y++;
+            if (collide(arena, player)) {
+                player.pos.y--;
+                merge(arena, player);
+                resetPlayer();
+                arenaSweep();
+            }
+            dropCounter = 0;
+        }
+
+        function playerMove(dir) {
+            player.pos.x += dir;
+            if (collide(arena, player)) player.pos.x -= dir;
+        }
+
+        function resetPlayer() {
+            const pieces = 'ILJOTSZ';
+            player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+            player.pos.y = 0;
+            player.pos.x = (arena[0].length / 2 | 0) - (player.matrix[0].length / 2 | 0);
+            if (collide(arena, player)) {
+                arena.forEach(row => row.fill(0));
+                player.score = 0;
+                updateScore();
+            }
+        }
+
+        function playerRotate(dir) {
+            const pos = player.pos.x;
+            let offset = 1;
+            rotateMatrix(player.matrix, dir);
+            while (collide(arena, player)) {
+                player.pos.x += offset;
+                offset = -(offset + (offset > 0 ? 1 : -1));
+                if (offset > player.matrix[0].length) {
+                    rotateMatrix(player.matrix, -dir);
+                    player.pos.x = pos;
+                    return;
+                }
+            }
+        }
+
+        let dropCounter = 0;
+        let dropInterval = 1000;
+        let lastTime = 0;
+
+        function update(time = 0) {
+            const deltaTime = time - lastTime;
+            lastTime = time;
+            dropCounter += deltaTime;
+            if (dropCounter > dropInterval) playerDrop();
+            draw();
+            requestAnimationFrame(update);
+        }
+
+        function updateScore() { scoreElement.innerText = player.score; }
+
+        const arena = createMatrix(12, 20);
+        const player = { pos: {x: 0, y: 0}, matrix: null, score: 0 };
+
+        // Controls
+        function move(dir) { playerMove(dir); }
+        function rotate() { playerRotate(1); }
+        function drop() { playerDrop(); }
+
+        // Quit logic
+        function drawQuitOnCanvas() {
+            // Draw quit button on bottom right of the canvas scale
+            context.fillStyle = "#38bdf8";
+            context.shadowBlur = 5;
+            context.fillRect(9, 18.5, 2.5, 1.2);
+            context.fillStyle = "#000";
+            context.font = "0.7px Arial";
+            context.fillText("QUIT", 9.3, 19.3);
+            context.shadowBlur = 0;
+        }
+
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / (rect.width / 12);
+            const y = (e.clientY - rect.top) / (rect.height / 20);
+            if(x > 9 && y > 18) location.reload();
+        });
+
+    </script>
+</body>
+</html>
